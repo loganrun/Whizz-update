@@ -1,23 +1,272 @@
+import { useRef, useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import {
+    View,
+    Platform,
+    Text,
+    Image,ActivityIndicator, StyleSheet,Dimensions, TouchableOpacity, Animated, FlatList
+} from "react-native";
+import { SafeAreaView } from 'react-native-safe-area-context';
+import MapView, { Callout, Marker, PROVIDER_GOOGLE} from 'react-native-maps';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import restApi from "../../services/restroom"
+import refugeeApi from "../../services/refugee"
+import axios from 'axios'
+
 
 export default function Map() {
-  return (
+
+    const [restRoom, setrestRoom] = useState(null);
+    const [errorMsg, setErrorMsg] = useState('');
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() =>{
+        loadRestroom()
+    }, [])
+
+const loadRestroom = async () => {
+    
+        try{
+    
+        let params = {
+            lat: 34.024212,//this.state.region.latitude,
+            lng: -118.496475,//this.state.region.longitude
+        };
+        
+        const result = await axios.all([
+            refugeeApi.get('/v1/restrooms/by_location',{params}),
+            restApi.get('/',{ params })
+            
+        ]).then(axios.spread((...responses) =>{
+            let response1 = responses[0].data;
+            let response2 = responses[1].data;
+            let prelim = response2.concat(response1);
+            return prelim
+        })).catch(err =>{
+            console.log("error", err.message);
+        })
+    
+        const  restRoom = await result.reduce((acc, current) =>{
+            const x = acc.find(item => item.street === current.street);
+            if (!x){
+            return acc.concat([current]);
+            }else{
+            return acc;
+            }
+
+        }, []  
+        )    
+        setrestRoom(restRoom);     
+        setLoading(false );
+        } catch (e) {
+        console.log("error", e.message);
+        }
+    };
+    console.log("coming from state")
+    console.log({restRoom})
+
+    const markers = [
+        {
+        coordinates: {
+            latitude: 34.024212,
+            longitude: -118.496475,
+        },
+        image: require('../../assets/pin-verified.png')
+        },
+        {
+        coordinates: {
+            latitude: 34.0129, 
+            longitude: -118.5017
+        },
+        image: require('../../assets/pin-verified.png')
+        }
+    ]
+return (
     <View style={styles.container}>
-      <Text>Hello from Maps!</Text>
-      <StatusBar style="auto" />
+    <MapView style={styles.map}
+    initialRegion={{
+         longitude: -118.243683, //this.props.location.longitude,
+         latitude: 34.052235, //this.props.location.latitude,
+        latitudeDelta: 0.072,//{0.022},
+        longitudeDelta: 0.070,//{0.021}
+    }}
+    customMapStyle={mapStyles}
+    showsUserLocation={true}
+    showsMyLocationButton={true}
+    >
+    {markers.map(marker => (
+        <Marker 
+        key={marker.title}
+        coordinate={marker.coordinates} 
+        title={marker.title}
+        image={marker.image}
+        /> 
+        ))}
+    </MapView>
     </View>
-  );
+    
+    
+);
 }
 
 const styles = StyleSheet.create({
-  container: {
+container: {
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-  },
+},
+map: {
+    width: '100%',
+    height: '100%'
+}
 });
+
+const mapStyles = [
+
+    {
+      'height': '100%',
+      'width': '100%'
+  
+    },
+      
+      {
+          "featureType": "administrative",
+          "elementType": "labels.text.fill",
+          "stylers": [
+              {
+                  "color": "#525f66"
+              }
+          ]
+      },
+      {
+          "featureType": "road.highway",
+          "elementType": "geometry.fill",
+          "stylers": [
+              {
+                  "color": "#8fa7b3"
+              },
+              {
+                  "lightness": "44"
+              }
+          ]
+      },
+      {
+          "featureType": "road.highway",
+          "elementType": "geometry.stroke",
+          "stylers": [
+              {
+                  "color": "#667780"
+              }
+          ]
+      },
+      {
+          "featureType": "road.highway",
+          "elementType": "labels.text.fill",
+          "stylers": [
+              {
+                  "color": "#333333"
+              }
+          ]
+      },
+      {
+          "featureType": "road.highway",
+          "elementType": "labels.text.stroke",
+          "stylers": [
+              {
+                  "color": "#8fa7b3"
+              },
+              {
+                  "gamma": 2
+              }
+          ]
+      },
+      {
+          "featureType": "road.arterial",
+          "elementType": "geometry.fill",
+          "stylers": [
+              {
+                  "color": "#a3becc"
+              }
+          ]
+      },
+      {
+          "featureType": "road.arterial",
+          "elementType": "geometry.stroke",
+          "stylers": [
+              {
+                  "color": "#7a8f99"
+              }
+          ]
+      },
+      {
+          "featureType": "road.arterial",
+          "elementType": "labels.text.fill",
+          "stylers": [
+              {
+                  "color": "#555555"
+              }
+          ]
+      },
+      {
+          "featureType": "road.local",
+          "elementType": "geometry.fill",
+          "stylers": [
+              {
+                  "color": "#a3becc"
+              }
+          ]
+      },
+      {
+          "featureType": "road.local",
+          "elementType": "geometry.stroke",
+          "stylers": [
+              {
+                  "color": "#7a8f99"
+              }
+          ]
+      },
+      {
+          "featureType": "road.local",
+          "elementType": "labels.text.fill",
+          "stylers": [
+              {
+                  "color": "#555555"
+              }
+          ]
+      },
+      {
+          "featureType": "transit",
+          "elementType": "labels.text.stroke",
+          "stylers": [
+              {
+                  "color": "#bbd9e9"
+              },
+              {
+                  "gamma": 2
+              }
+          ]
+      },
+      {
+          "featureType": "transit.line",
+          "elementType": "geometry.fill",
+          "stylers": [
+              {
+                  "color": "#a3aeb5"
+              }
+          ]
+      },
+      {
+          "featureType": "water",
+          "elementType": "geometry.fill",
+          "stylers": [
+              {
+                  "color": "#bbd9e9"
+              }
+          ]
+      }
+  ]
+
 
 // import React, { Component } from "react";
 // import {
@@ -676,143 +925,7 @@ const styles = StyleSheet.create({
       
 //   }
 // });
-// const mapStyles = [
-//     {
-//         "featureType": "administrative",
-//         "elementType": "labels.text.fill",
-//         "stylers": [
-//             {
-//                 "color": "#525f66"
-//             }
-//         ]
-//     },
-//     {
-//         "featureType": "road.highway",
-//         "elementType": "geometry.fill",
-//         "stylers": [
-//             {
-//                 "color": "#8fa7b3"
-//             },
-//             {
-//                 "lightness": "44"
-//             }
-//         ]
-//     },
-//     {
-//         "featureType": "road.highway",
-//         "elementType": "geometry.stroke",
-//         "stylers": [
-//             {
-//                 "color": "#667780"
-//             }
-//         ]
-//     },
-//     {
-//         "featureType": "road.highway",
-//         "elementType": "labels.text.fill",
-//         "stylers": [
-//             {
-//                 "color": "#333333"
-//             }
-//         ]
-//     },
-//     {
-//         "featureType": "road.highway",
-//         "elementType": "labels.text.stroke",
-//         "stylers": [
-//             {
-//                 "color": "#8fa7b3"
-//             },
-//             {
-//                 "gamma": 2
-//             }
-//         ]
-//     },
-//     {
-//         "featureType": "road.arterial",
-//         "elementType": "geometry.fill",
-//         "stylers": [
-//             {
-//                 "color": "#a3becc"
-//             }
-//         ]
-//     },
-//     {
-//         "featureType": "road.arterial",
-//         "elementType": "geometry.stroke",
-//         "stylers": [
-//             {
-//                 "color": "#7a8f99"
-//             }
-//         ]
-//     },
-//     {
-//         "featureType": "road.arterial",
-//         "elementType": "labels.text.fill",
-//         "stylers": [
-//             {
-//                 "color": "#555555"
-//             }
-//         ]
-//     },
-//     {
-//         "featureType": "road.local",
-//         "elementType": "geometry.fill",
-//         "stylers": [
-//             {
-//                 "color": "#a3becc"
-//             }
-//         ]
-//     },
-//     {
-//         "featureType": "road.local",
-//         "elementType": "geometry.stroke",
-//         "stylers": [
-//             {
-//                 "color": "#7a8f99"
-//             }
-//         ]
-//     },
-//     {
-//         "featureType": "road.local",
-//         "elementType": "labels.text.fill",
-//         "stylers": [
-//             {
-//                 "color": "#555555"
-//             }
-//         ]
-//     },
-//     {
-//         "featureType": "transit",
-//         "elementType": "labels.text.stroke",
-//         "stylers": [
-//             {
-//                 "color": "#bbd9e9"
-//             },
-//             {
-//                 "gamma": 2
-//             }
-//         ]
-//     },
-//     {
-//         "featureType": "transit.line",
-//         "elementType": "geometry.fill",
-//         "stylers": [
-//             {
-//                 "color": "#a3aeb5"
-//             }
-//         ]
-//     },
-//     {
-//         "featureType": "water",
-//         "elementType": "geometry.fill",
-//         "stylers": [
-//             {
-//                 "color": "#bbd9e9"
-//             }
-//         ]
-//     }
-// ]
+
 
 // export default connect(mapStateToProps)(BathMap);
 

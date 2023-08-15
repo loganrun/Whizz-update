@@ -7,6 +7,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 //import AppLoading from 'expo-app-loading';
 //import { useFonts } from 'expo-font';
 //import {MainLayout} from './src/screens';
+import MapView from 'react-native-maps';
 import {Maps} from './screens/index';
 import { Food } from './screens/index';
 import { Favorites } from './screens/index';
@@ -18,11 +19,18 @@ const Stack = createNativeStackNavigator()
 
 
 export default function App() {
+
+  // return (
+  //   <View style={styles.container}>
+  //     <MapView style={styles.map} />
+      
+  //   </View>
+  // );
   return (
     <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator initialRouteName= {'Dashboard'} 
-        screenOptions={{headerShown: false, gestureEnabled: true}}>
+        screenOptions={{headerShown: true, gestureEnabled: true}}>
           <Stack.Screen name="Map" component={TabNavigator}/>
           <Stack.Screen name="Food" component={Food}/>
           <Stack.Screen name="Favourites" component={Favorites}/>
@@ -39,6 +47,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  map:{
+    width: '100%',
+    height: '100%'
+  }
 });
 
 // import { StatusBar } from 'expo-status-bar';

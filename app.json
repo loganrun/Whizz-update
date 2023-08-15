@@ -2,14 +2,13 @@
   "expo": {
     "name": "wz",
     "slug": "wz",
-    "version": "1.0.0",
+    "version": "3.8.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/whizz_logo1.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "image": "./assets/splash1.png",
+      "resizeMode": "cover"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
