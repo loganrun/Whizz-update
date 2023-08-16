@@ -62,8 +62,8 @@ const loadRestroom = async () => {
         console.log("error", e.message);
         }
     };
-    console.log("coming from state")
-    console.log({restRoom})
+    //console.log("coming from state")
+    //console.log({restRoom})
 
     const markers = [
         {

@@ -26,7 +26,7 @@ export default function App() {
 
   useEffect(() => {
     (async () => {
-      
+      console.log("initloc")
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
         setErrorMsg('Permission to access location was denied');
