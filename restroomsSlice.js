@@ -15,8 +15,10 @@ const restroomsSlice = createSlice({
       state.isLoading = true;
     },
     getRestroomsSuccess(state, action) {
+      const {payload} = action
       state.isLoading = false;
-      state.locations = action.payload; 
+      return { ...state, locations: { ...state.locations, payload } };
+      //state.locations = action.payload; 
     },
     getRestroomsFailed(state, action) {
       state.isLoading = false;

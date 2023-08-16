@@ -53,17 +53,44 @@ const loadRestroom = async () => {
             }else{
             return acc;
             }
+            
 
-        }, []  
-        )    
-        setrestRoom(restRoom);     
+        } , []
+
+        )
+        console.log(restRoom)
+
+        // setrestRoom({
+        //    restRoom: {
+        //         "__v":0,
+        //         "_id":"60dea0e032f99438600c421d",
+        //         "accessible":false,
+        //         "changing_table":false,
+        //         "city":"Santa Monica",
+        //         "count":1,
+        //         "date":"2021-07-02T05:15:12.054Z",
+        //         "directions":"",
+        //         "distance":0.7096545521351059,
+        //         "id":"ba30319e-ac7a-4dab-bca6-036a7e4d0be3",
+        //         "latitude":34.0148049,
+        //         "longitude":-118.5014149,
+        //         "lowerCard":"https://storage.googleapis.com/whizz_pics/lower-card-generic.png",
+        //         "name":"Santa Monica Beach Family Restroom",
+        //         "rating":5,
+        //         "state":"California",
+        //         "street":"12 Bike Path",
+        //         "totalRatings":0,
+        //         "unisex":true,
+        //         "verified":"yes"
+        //      },
+        // });     
         setLoading(false );
         } catch (e) {
         console.log("error", e.message);
         }
     };
     //console.log("coming from state")
-    //console.log({restRoom})
+    
 
     const markers = [
         {
