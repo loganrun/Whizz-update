@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Alert } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import TabNavigator from "./Navigation/TabNavigator"
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import rootReducer from './store/reducers';
+import thunk from 'redux-thunk'
+import { configureStore } from '@reduxjs/toolkit'
+import {Provider} from 'react-redux';
+import * as SplashScreen from 'expo-splash-screen'
 //import AppLoading from 'expo-app-loading';
 //import { useFonts } from 'expo-font';
 //import {MainLayout} from './src/screens';
@@ -17,29 +23,58 @@ import * as Location from 'expo-location';
 
 
 const Stack = createNativeStackNavigator()
+const store = configureStore({reducer:rootReducer})
 
+SplashScreen.preventAutoHideAsync();
 
 export default function App() {
 
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
+  const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
     (async () => {
-      console.log("initloc")
+      
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
-        setErrorMsg('Permission to access location was denied');
+        Alert.alert('Permission to access location was denied');
         return;
       }
 
       let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
+      const jsonValue = JSON.stringify(location);
+      await AsyncStorage.setItem('location', jsonValue);
+      console.log(location)
+      setLoaded(true)
+
     })();
   }, []);
 
+  // useEffect(() => {
+  //   if (error) throw error;
+  // }, [error]);
+
+  useEffect(() => {
+    if (loaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded]);
+
+  if (!loaded) {
+    return null;
+  }
+
+  return <RootLayoutNav />;
+
+  
+}
+
+function RootLayoutNav() {
   return (
-    <SafeAreaProvider>
+
+    <Provider store={store}>
+      <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator initialRouteName= {'Dashboard'} 
         screenOptions={{headerShown: true, gestureEnabled: true}}>
@@ -49,6 +84,11 @@ export default function App() {
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
+    </Provider>
+  
+      
+      
+    
   );
 }
 
