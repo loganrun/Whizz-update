@@ -11,7 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // import { configureStore } from '@reduxjs/toolkit'
 import {Provider} from 'react-redux';
 import * as SplashScreen from 'expo-splash-screen'
-import {store} from './store'
+
 //import AppLoading from 'expo-app-loading';
 //import { useFonts } from 'expo-font';
 //import {MainLayout} from './src/screens';
@@ -20,6 +20,7 @@ import {store} from './store'
 import {Maps} from './screens/index';
 import { Food } from './screens/index';
 import { Favorites } from './screens/index';
+import store from './store'
 import { useSelector, useDispatch } from 'react-redux';
 import { getLocationStart, getLocationSuccess, getLocationFailed } from './locationSlice'
 import * as Location from 'expo-location';
