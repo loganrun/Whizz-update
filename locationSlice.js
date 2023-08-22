@@ -4,7 +4,7 @@ import axios from 'axios';
 
 
 const initialState = {
-initlocation: {},
+location: null,
 isLoading: false,
 error: null  
 };
@@ -20,7 +20,7 @@ reducers: {
     const {payload} = action
     state.isLoading = false;
     const loc = payload.coords
-    return { ...state, initlocation: {...state.initlocation, loc} };
+    return { ...state, location: {...state.location, loc} };
       // console.log(current(state))
       // return { ...state, locations: { ...state.locations, payload } };
     //state.location = action.payload;

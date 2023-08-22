@@ -6,56 +6,44 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import TabNavigator from "./Navigation/TabNavigator"
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-// import rootReducer from './store/reducers';
-// import thunk from 'redux-thunk'
-// import { configureStore } from '@reduxjs/toolkit'
 import {Provider} from 'react-redux';
+import {store} from './store'
 import * as SplashScreen from 'expo-splash-screen'
+
 
 //import AppLoading from 'expo-app-loading';
 //import { useFonts } from 'expo-font';
 //import {MainLayout} from './src/screens';
-
-//import MapView from 'react-native-maps';
+import { Auth } from './screens/index';
 import {Maps} from './screens/index';
 import { Food } from './screens/index';
 import { Favorites } from './screens/index';
-import store from './store'
-import { useSelector, useDispatch } from 'react-redux';
-import { getLocationStart, getLocationSuccess, getLocationFailed } from './locationSlice'
 import * as Location from 'expo-location';
 
 
-
 const Stack = createNativeStackNavigator()
-//const store = configureStore({reducer:rootReducer})
 
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
 
-  const dispatch = useDispatch()
-  const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
-  const [loaded, setLoaded] = useState(false)
+  const [loaded, setLoaded] = useState(true)
 
   useEffect(() => {
-    (async () => {
-      
-      let { status } = await Location.requestForegroundPermissionsAsync();
+    const getLocation = async () =>{
+      const jsonValue = JSON.stringify(location);let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
         Alert.alert('Permission to access location was denied');
         return;
       }
-
       let location = await Location.getCurrentPositionAsync({});
-      dispatch(getLocationSuccess(location))
-      const jsonValue = JSON.stringify(location);
       await AsyncStorage.setItem('location', jsonValue);
-      //console.log(location)
-      setLoaded(true)
 
-    })();
+      setLoaded(true)
+    }
+    
+    getLocation()
   }, []);
 
   // useEffect(() => {
@@ -85,6 +73,7 @@ function RootLayoutNav() {
       <NavigationContainer>
         <Stack.Navigator initialRouteName= {'Dashboard'} 
         screenOptions={{headerShown: true, gestureEnabled: true}}>
+          <Stack.Screen name="Auth" component={Auth}/>
           <Stack.Screen name="Map" component={TabNavigator}/>
           <Stack.Screen name="Food" component={Food}/>
           <Stack.Screen name="Favourites" component={Favorites}/>

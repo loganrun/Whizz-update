@@ -7,7 +7,10 @@ import {
     Image,ActivityIndicator, StyleSheet,Dimensions, TouchableOpacity, Animated, FlatList
 } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import MapView, { Callout, Marker, PROVIDER_GOOGLE} from 'react-native-maps';
+import {useDispatch, useSelector } from 'react-redux';
+import { getLocationStart, getLocationSuccess, getLocationFailed } from '../../locationSlice'
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import restApi from "../../services/restroom"
 import refugeeApi from "../../services/refugee"
@@ -15,83 +18,204 @@ import axios from 'axios'
 
 
 export default function Map() {
+    //const dispatch =useDispatch()
+    const location = useSelector((state) => state.location.location)
+    console.log(location.loc.latitude)
 
     const [restRoom, setrestRoom] = useState(null);
     const [errorMsg, setErrorMsg] = useState('');
     const [loading, setLoading] = useState(true)
+    const [region, setRegion] = useState({
+        latitude: null,
+        longitude: null,
+        latitudeDelta: 0.072,//{0.022},
+        longitudeDelta: 0.070,
+    })
 
-    useEffect(() =>{
-        //loadRestroom()
-    }, [])
-
-const loadRestroom = async () => {
-    
-        try{
-    
-        let params = {
-            lat: 34.024212,//this.state.region.latitude,
-            lng: -118.496475,//this.state.region.longitude
-        };
+    // useEffect(async ()  =>{
+    //     // const jsonValue = await AsyncStorage.getItem('location');
+    //     // const location = jsonValue != null ? JSON.parse(jsonValue) : null;
+    //     // setLocation(location.coords)
         
-        const result = await axios.all([
-            refugeeApi.get('/v1/restrooms/by_location',{params}),
-            restApi.get('/',{ params })
+    //     // await loadRestroom()
+    //     const getData = async () => {
+    //         try {
+    //         const jsonValue = await AsyncStorage.getItem('location');
+    //         const location= jsonValue != null ? JSON.parse(jsonValue) : null;
+    //         //console.log(location.coords)
+    //         setRegion({
+    //             latitude: location.coords.latitude,
+    //             longitude: location.coords.longitude,
+    //             latitudeDelta: 0.072,//{0.022},
+    //             longitudeDelta: 0.070,
+    //         })
+    //           //console.log(location.coords)
+    //         } catch (e) {
+    //           // error reading value
+    //         setErrorMsg(e.message)
+    //         console.log(e.message)
+    //         }
             
-        ]).then(axios.spread((...responses) =>{
-            let response1 = responses[0].data;
-            let response2 = responses[1].data;
-            let prelim = response2.concat(response1);
-            return prelim
-        })).catch(err =>{
-            console.log("error", err.message);
-        })
+    //     };
+
+    //     getData()
     
-        const  restRoom = await result.reduce((acc, current) =>{
-            const x = acc.find(item => item.street === current.street);
-            if (!x){
-            return acc.concat([current]);
-            }else{
-            return acc;
-            }
+    // }, [])
+
+    // useEffect(() => {
+
+    //     if (!initlocation){
+    //         new Promise(resolve => setTimeout(resolve, 2000));     
+    //         return
+    //     }
+       
+
+    //     const loadRestroom = async () => {   
+    //         // await new Promise(resolve => setTimeout(resolve, 2000));     
+    //             try{
+            
+    //             let params = {
+    //                 lat: 34.024212,//this.state.region.latitude,
+    //                 lng: -118.496475,//this.state.region.longitude
+                    
+    //             };
+    //             //console.log(params)
+                
+    //             const result = await axios.all([
+    //                 refugeeApi.get('/v1/restrooms/by_location',{params}),
+    //                 restApi.get('/',{ params })
+                    
+                    
+    //             ]).then(axios.spread((...responses) =>{
+    //                 let response1 = responses[0].data;
+    //                 let response2 = responses[1].data;
+    //                 let prelim = response2.concat(response1);
+    //                 return prelim
+    //             })).catch(err =>{
+    //                 console.log("error", err.message);
+    //             })
+            
+    //             const  restRoom = await result.reduce((acc, current) =>{
+    //                 const x = acc.find(item => item.street === current.street);
+    //                 if (!x){
+    //                 return acc.concat([current]);
+    //                 }else{
+    //                 return acc;
+    //                 }
+                    
+        
+    //             } , []
+        
+    //             )
+    //             console.log(restRoom)
+        
+        
+    //             //setLoading(false );
+    //             } catch (e) {
+    //             console.log("error", e.message);
+    //             }
+    //         }; 
+    //         loadRestroom()
+
+    //     },  [initlocation])
+
+    // useEffect(async ()  =>{
+    //     //await getData()
+        
+    //     loadRestroom(location)
+    // }, [])
+
+
+
+    // const getData = async () => {
+    //     try {
+    //       const jsonValue = await AsyncStorage.getItem('location');
+    //       const location= jsonValue != null ? JSON.parse(jsonValue) : null;
+    //       setLocation(location.coords)
+    //       //console.log(location.coords)
+    //     } catch (e) {
+    //       // error reading value
+    //       console.log(e)
+    //     }
+    //     loadRestroom(location)
+    //   };
+
+    //console.log(location)
+
+
+
+// const loadRestroom = async () => {
+//     //console.log(location)
+//     if(initlocation){
+//         try{
+    
+//         let params = {
+//             lat: initlocation.lattitude, //34.024212,//this.state.region.latitude,
+//             lng: initlocation.longitude //-118.496475,//this.state.region.longitude
+//         };
+        
+//         const result = await axios.all([
+//             refugeeApi.get('/v1/restrooms/by_location',{params}),
+//             restApi.get('/',{ params })
+            
+//         ]).then(axios.spread((...responses) =>{
+//             let response1 = responses[0].data;
+//             let response2 = responses[1].data;
+//             let prelim = response2.concat(response1);
+//             return prelim
+//         })).catch(err =>{
+//             console.log("error", err.message);
+//         })
+    
+//         const  restRoom = await result.reduce((acc, current) =>{
+//             const x = acc.find(item => item.street === current.street);
+//             if (!x){
+//             return acc.concat([current]);
+//             }else{
+//             return acc;
+//             }
             
 
-        } , []
+//         } , []
 
-        )
-        console.log(restRoom)
+//         )
+//         console.log(restRoom)
 
-        // setrestRoom({
-        //    restRoom: {
-        //         "__v":0,
-        //         "_id":"60dea0e032f99438600c421d",
-        //         "accessible":false,
-        //         "changing_table":false,
-        //         "city":"Santa Monica",
-        //         "count":1,
-        //         "date":"2021-07-02T05:15:12.054Z",
-        //         "directions":"",
-        //         "distance":0.7096545521351059,
-        //         "id":"ba30319e-ac7a-4dab-bca6-036a7e4d0be3",
-        //         "latitude":34.0148049,
-        //         "longitude":-118.5014149,
-        //         "lowerCard":"https://storage.googleapis.com/whizz_pics/lower-card-generic.png",
-        //         "name":"Santa Monica Beach Family Restroom",
-        //         "rating":5,
-        //         "state":"California",
-        //         "street":"12 Bike Path",
-        //         "totalRatings":0,
-        //         "unisex":true,
-        //         "verified":"yes"
-        //      },
-        // });     
-        setLoading(false );
-        } catch (e) {
-        console.log("error", e.message);
-        }
-    };
+//         // setrestRoom({
+//         //    restRoom: {
+//         //         "__v":0,
+//         //         "_id":"60dea0e032f99438600c421d",
+//         //         "accessible":false,
+//         //         "changing_table":false,
+//         //         "city":"Santa Monica",
+//         //         "count":1,
+//         //         "date":"2021-07-02T05:15:12.054Z",
+//         //         "directions":"",
+//         //         "distance":0.7096545521351059,
+//         //         "id":"ba30319e-ac7a-4dab-bca6-036a7e4d0be3",
+//         //         "latitude":34.0148049,
+//         //         "longitude":-118.5014149,
+//         //         "lowerCard":"https://storage.googleapis.com/whizz_pics/lower-card-generic.png",
+//         //         "name":"Santa Monica Beach Family Restroom",
+//         //         "rating":5,
+//         //         "state":"California",
+//         //         "street":"12 Bike Path",
+//         //         "totalRatings":0,
+//         //         "unisex":true,
+//         //         "verified":"yes"
+//         //      },
+//         // });     
+//         setLoading(false );
+//         } catch (e) {
+//         console.log("error", e.message);
+//         } 
+//     }  else{
+//             return null
+//         }
+//     };
     //console.log("coming from state")
     
-
+//console.log(initlocation)
     const markers = [
         {
         coordinates: {
@@ -108,14 +232,26 @@ const loadRestroom = async () => {
         image: require('../../assets/pin-verified.png')
         }
     ]
+// if(!region){
+//     return (
+//         <View style={[styles.container, styles.horizontal]}>
+//     <ActivityIndicator />
+//     <ActivityIndicator size="large" />
+//     <ActivityIndicator size="small" color="#0000ff" />
+//     <ActivityIndicator size="large" color="#00ff00" />
+//   </View>
+//     )
+// }else{
+
 return (
     <View style={styles.container}>
     <MapView style={styles.map}
     initialRegion={{
-         longitude: -118.243683, //this.props.location.longitude,
-         latitude: 34.052235, //this.props.location.latitude,
+        longitude:location.loc.longitude,//-118.243683, //region.longitude,//-118.243683, //this.props.location.longitude,
+        latitude: location.loc.latitude, //34.052235, //region.latitude,//34.052235, //this.props.location.latitude,location.loc.latitude
         latitudeDelta: 0.072,//{0.022},
         longitudeDelta: 0.070,//{0.021}
+        //region}
     }}
     customMapStyle={mapStyles}
     showsUserLocation={true}
@@ -136,6 +272,7 @@ return (
 );
 }
 
+
 const styles = StyleSheet.create({
 container: {
     flex: 1,
@@ -143,6 +280,11 @@ container: {
     alignItems: 'center',
     justifyContent: 'center',
 },
+horizontal: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10,
+  },
 map: {
     width: '100%',
     height: '100%'
