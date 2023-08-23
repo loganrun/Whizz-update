@@ -12,226 +12,234 @@ import MapView, { Callout, Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 import {useDispatch, useSelector } from 'react-redux';
 import { getLocationStart, getLocationSuccess, getLocationFailed } from '../../locationSlice'
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 import restApi from "../../services/restroom"
 import refugeeApi from "../../services/refugee"
 import axios from 'axios'
-
+let tprating = require("../../assets/TPratings_5Stars.png")
+let genericFood = require('../../assets/SEARCH-lower-card-generic-img-1.png')
+let unverified = require('../../assets/mascot-01-unverified-349x161.png')
+let verified = require('../../assets/mascot-01-verified-329x161.png')
+let premicon = require('../../assets/pin-verified.png')
+let regIcon = require('../../assets/pin-unverified.png')
+const { width, height } = Dimensions.get("window");
+const CARD_HEIGHT = 180;
+const CARD_WIDTH = width * 0.80;
+const SPACING_FOR_CARD_INSET = width * 0.1 - 10;
+//let newAn = scrollX(new Animated.Value(0)).current;
+//console.log(scrollX)
+let mapIndex = 0
 
 export default function Map() {
-    //const dispatch =useDispatch()
+
     const location = useSelector((state) => state.location.location)
-    console.log(location.loc.latitude)
-
-    const [restRoom, setrestRoom] = useState(null);
+    const navigation = useNavigation()
+    const [bathroom, setBathroom] = useState([]);
     const [errorMsg, setErrorMsg] = useState('');
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(true);
     const [region, setRegion] = useState({
-        latitude: null,
-        longitude: null,
-        latitudeDelta: 0.072,//{0.022},
+        latitude: 0.0,
+        longitude: 0.0,
+        latitudeDelta: 0.072,
         longitudeDelta: 0.070,
-    })
+    });
 
-    // useEffect(async ()  =>{
-    //     // const jsonValue = await AsyncStorage.getItem('location');
-    //     // const location = jsonValue != null ? JSON.parse(jsonValue) : null;
-    //     // setLocation(location.coords)
-        
-    //     // await loadRestroom()
-    //     const getData = async () => {
-    //         try {
-    //         const jsonValue = await AsyncStorage.getItem('location');
-    //         const location= jsonValue != null ? JSON.parse(jsonValue) : null;
-    //         //console.log(location.coords)
-    //         setRegion({
-    //             latitude: location.coords.latitude,
-    //             longitude: location.coords.longitude,
-    //             latitudeDelta: 0.072,//{0.022},
-    //             longitudeDelta: 0.070,
-    //         })
-    //           //console.log(location.coords)
-    //         } catch (e) {
-    //           // error reading value
-    //         setErrorMsg(e.message)
-    //         console.log(e.message)
-    //         }
-            
-    //     };
+    useEffect(()=>{
+        setRegion({
+            latitude: location.loc.latitude,
+            longitude: location.loc.longitude,
+            latitudeDelta: 0.072,
+            longitudeDelta: 0.070,
+        })
 
-    //     getData()
+    }, [])
+
+    useEffect(()=>{
+
+        loadRestrooms()
+
+    }, [])
+
+    const loadRestrooms = async () => {
     
-    // }, [])
-
-    // useEffect(() => {
-
-    //     if (!initlocation){
-    //         new Promise(resolve => setTimeout(resolve, 2000));     
-    //         return
-    //     }
-       
-
-    //     const loadRestroom = async () => {   
-    //         // await new Promise(resolve => setTimeout(resolve, 2000));     
-    //             try{
-            
-    //             let params = {
-    //                 lat: 34.024212,//this.state.region.latitude,
-    //                 lng: -118.496475,//this.state.region.longitude
-                    
-    //             };
-    //             //console.log(params)
-                
-    //             const result = await axios.all([
-    //                 refugeeApi.get('/v1/restrooms/by_location',{params}),
-    //                 restApi.get('/',{ params })
-                    
-                    
-    //             ]).then(axios.spread((...responses) =>{
-    //                 let response1 = responses[0].data;
-    //                 let response2 = responses[1].data;
-    //                 let prelim = response2.concat(response1);
-    //                 return prelim
-    //             })).catch(err =>{
-    //                 console.log("error", err.message);
-    //             })
-            
-    //             const  restRoom = await result.reduce((acc, current) =>{
-    //                 const x = acc.find(item => item.street === current.street);
-    //                 if (!x){
-    //                 return acc.concat([current]);
-    //                 }else{
-    //                 return acc;
-    //                 }
-                    
-        
-    //             } , []
-        
-    //             )
-    //             console.log(restRoom)
-        
-        
-    //             //setLoading(false );
-    //             } catch (e) {
-    //             console.log("error", e.message);
-    //             }
-    //         }; 
-    //         loadRestroom()
-
-    //     },  [initlocation])
-
-    // useEffect(async ()  =>{
-    //     //await getData()
-        
-    //     loadRestroom(location)
-    // }, [])
-
-
-
-    // const getData = async () => {
-    //     try {
-    //       const jsonValue = await AsyncStorage.getItem('location');
-    //       const location= jsonValue != null ? JSON.parse(jsonValue) : null;
-    //       setLocation(location.coords)
-    //       //console.log(location.coords)
-    //     } catch (e) {
-    //       // error reading value
-    //       console.log(e)
-    //     }
-    //     loadRestroom(location)
-    //   };
-
-    //console.log(location)
-
-
-
-// const loadRestroom = async () => {
-//     //console.log(location)
-//     if(initlocation){
-//         try{
+        try{
     
-//         let params = {
-//             lat: initlocation.lattitude, //34.024212,//this.state.region.latitude,
-//             lng: initlocation.longitude //-118.496475,//this.state.region.longitude
-//         };
-        
-//         const result = await axios.all([
-//             refugeeApi.get('/v1/restrooms/by_location',{params}),
-//             restApi.get('/',{ params })
+        let params = {
+            lat: region.latitude,
+            lng: region.longitude
+        };
+
+        const result = await axios.all([
             
-//         ]).then(axios.spread((...responses) =>{
-//             let response1 = responses[0].data;
-//             let response2 = responses[1].data;
-//             let prelim = response2.concat(response1);
-//             return prelim
-//         })).catch(err =>{
-//             console.log("error", err.message);
-//         })
-    
-//         const  restRoom = await result.reduce((acc, current) =>{
-//             const x = acc.find(item => item.street === current.street);
-//             if (!x){
-//             return acc.concat([current]);
-//             }else{
-//             return acc;
-//             }
+            refugeeApi.get('/v1/restrooms/by_location',{params}),
+            restApi.get('/',{ params })
             
-
-//         } , []
-
-//         )
-//         console.log(restRoom)
-
-//         // setrestRoom({
-//         //    restRoom: {
-//         //         "__v":0,
-//         //         "_id":"60dea0e032f99438600c421d",
-//         //         "accessible":false,
-//         //         "changing_table":false,
-//         //         "city":"Santa Monica",
-//         //         "count":1,
-//         //         "date":"2021-07-02T05:15:12.054Z",
-//         //         "directions":"",
-//         //         "distance":0.7096545521351059,
-//         //         "id":"ba30319e-ac7a-4dab-bca6-036a7e4d0be3",
-//         //         "latitude":34.0148049,
-//         //         "longitude":-118.5014149,
-//         //         "lowerCard":"https://storage.googleapis.com/whizz_pics/lower-card-generic.png",
-//         //         "name":"Santa Monica Beach Family Restroom",
-//         //         "rating":5,
-//         //         "state":"California",
-//         //         "street":"12 Bike Path",
-//         //         "totalRatings":0,
-//         //         "unisex":true,
-//         //         "verified":"yes"
-//         //      },
-//         // });     
-//         setLoading(false );
-//         } catch (e) {
-//         console.log("error", e.message);
-//         } 
-//     }  else{
-//             return null
-//         }
-//     };
-    //console.log("coming from state")
+        ]).then(axios.spread((...responses) =>{
+            let response1 = responses[0].data;
+            let response2 = responses[1].data;
+            let prelim = response2.concat(response1);
     
-//console.log(initlocation)
-    const markers = [
-        {
-        coordinates: {
-            latitude: 34.024212,
-            longitude: -118.496475,
-        },
-        image: require('../../assets/pin-verified.png')
-        },
-        {
-        coordinates: {
-            latitude: 34.0129, 
-            longitude: -118.5017
-        },
-        image: require('../../assets/pin-verified.png')
+            return prelim
+        })).catch(err =>{
+            console.log("error", err.message);
+        })
+    
+        // const  bathroom = await result.reduce((acc, current) =>{
+        //     const x = acc.find(item => item.street === current.street);
+        //     if (!x){
+        //     return acc.concat([current]);
+        //     }else{
+        //     return acc;
+        //     }
+    
+        // }, []  
+        // )
+        setBathroom(result)
+        setLoading(false)
+    
+        } catch (e) {
+        console.log("error", e.message);
         }
-    ]
+    };
+
+    
+
+const createMarkers= () => {
+    console.log('createMarkers called')
+    //    // const { navigate } = this.props.navigation;
+        //     return bathroom.map((item, index) => {
+        
+        // if(Platform.OS === 'android' && item.verified){
+        // return (
+        // <MapView.Marker
+        //     key= {index}
+        //     coordinate={{
+        //         latitude: item.latitude,
+        //         longitude: item.longitude
+        //     }}
+            
+        //     image={premicon}
+            
+    //        // onPress={() => {
+    //         //     const markerProp = {
+    //         //     id: item.id,
+    //         //     name: item.name,
+    //         //     street: item.street,
+    //         //     city: item.city,
+    //         //     distance: item.distance
+    //         //     }
+                
+    //         //     // this.flatListRef.scrollToIndex({animated: true, index: index})
+    //         //     }}
+        //         >
+                
+        // </MapView.Marker>
+        //     )
+        //     }if(!item.verified){
+        //     return (
+        //         <MapView.Marker
+        //         key= {index}
+        //         coordinate={{
+        //         latitude: item.latitude,
+        //         longitude: item.longitude
+        //         }}
+
+        //         image={regIcon}
+    //             // onPress={() => {
+    //             // const markerProp = {
+    //             // id: item.id,
+    //             // name: item.name,
+    //             // street: item.street,
+    //             // city: item.city,
+    //             // distance: item.distance
+    //             // }
+    //             // // Amplitude.logEventWithPropertiesAsync("MARKER_SELECT", markerProp)
+    //             // // this.flatListRef.scrollToIndex({animated: true, index: index})
+    //             // }}
+                
+            //     >
+        
+            //     </MapView.Marker>
+            // )
+    
+            // }else{
+            // if(item.verified){
+            //     return (
+            //     <MapView.Marker
+            //     key= {index}
+            //     coordinate={{
+            //         latitude: item.latitude,
+            //         longitude: item.longitude
+            //     }}
+            //       //title={item.name}
+            //     image={premicon}
+    //               //style={{height: 30, width: 30}}
+    //             // onPress={() => {
+    //             //     const markerProp = {
+    //             //     id: item.id,
+    //             //     name: item.name,
+    //             //     street: item.street,
+    //             //     city: item.city,
+    //             //     distance: item.distance
+    //             //     }
+    //                 // Amplitude.logEventWithPropertiesAsync("MARKER_SELECT", markerProp)
+    //                 // this.flatListRef.scrollToIndex({animated: true, index: index})
+                    
+    //             //}}
+                
+            // >
+            // </MapView.Marker>
+            //     ) ;
+            // }else{
+    
+            //     return (
+            //     <MapView.Marker
+            //     key= {index}
+            //     coordinate={{
+            //         latitude: item.latitude,
+            //         longitude: item.longitude
+            //     }}
+            //       //title={item.name}
+            //     image={regIcon}
+    //               //style={{height: 30, width: 30}}
+    //             // onPress={() => {
+    //             //     const markerProp = {
+    //             //     id: item.id,
+    //             //     name: item.name,
+    //             //     street: item.street,
+    //             //     city: item.city,
+    //             //     distance: item.distance
+    //             //     }
+    //             //     // Amplitude.logEventWithPropertiesAsync("MARKER_SELECT", markerProp)
+    //             //     // this.flatListRef.scrollToIndex({animated: true, index: index})
+                    
+    //             // }}
+        //         >
+                    
+        // </MapView.Marker>
+        //         )
+        //     }
+        //     }
+        // });
+    }
+    
+
+    // const markers = [
+    //     {
+    //     coordinates: {
+    //         latitude: 34.024212,
+    //         longitude: -118.496475,
+    //     },
+    //     image: require('../../assets/pin-verified.png')
+    //     },
+    //     {
+    //     coordinates: {
+    //         latitude: 34.0129, 
+    //         longitude: -118.5017
+    //     },
+    //     image: require('../../assets/pin-verified.png')
+    //     }
+    // ]
 // if(!region){
 //     return (
 //         <View style={[styles.container, styles.horizontal]}>
@@ -242,29 +250,40 @@ export default function Map() {
 //   </View>
 //     )
 // }else{
-
+    if (loading) {
+        return (
+        <View style={{flex: 1, justifyContent: 'center'}}>
+            <ActivityIndicator size="large" />
+        </View>
+        );
+    }
+    
 return (
     <View style={styles.container}>
     <MapView style={styles.map}
     initialRegion={{
         longitude:location.loc.longitude,//-118.243683, //region.longitude,//-118.243683, //this.props.location.longitude,
         latitude: location.loc.latitude, //34.052235, //region.latitude,//34.052235, //this.props.location.latitude,location.loc.latitude
-        latitudeDelta: 0.072,//{0.022},
-        longitudeDelta: 0.070,//{0.021}
+        latitudeDelta: 0.1564, //0.072,//{0.022},
+        longitudeDelta: 0.0636//0.070,//{0.021}
         //region}
     }}
     customMapStyle={mapStyles}
     showsUserLocation={true}
     showsMyLocationButton={true}
     >
-    {markers.map(marker => (
-        <Marker 
-        key={marker.title}
-        coordinate={marker.coordinates} 
-        title={marker.title}
-        image={marker.image}
-        /> 
-        ))}
+    {bathroom.map((marker, index) => (
+    <Marker
+    key={index}
+    coordinate={{latitude: marker.latitude, longitude: marker.longitude}}
+    //image={{uri: 'custom_pin'}}
+    //image= {{require('../../assets/pin-verified.png')}}
+    //coordinate={marker.latlng}
+    title={marker.title}
+    description={marker.description}
+    />
+))}
+
     </MapView>
     </View>
     

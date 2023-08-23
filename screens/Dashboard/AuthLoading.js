@@ -5,17 +5,18 @@ import { useNavigation } from '@react-navigation/native';
 import { getLocationStart, getLocationSuccess, getLocationFailed } from '../../locationSlice'
 import {useDispatch } from 'react-redux';
 
+
 const AuthLoading = () => {
     const navigation = useNavigation()
     const dispatch = useDispatch()
-    const [data, setData] = useState(null);
+    const [data, setData] = useState(false);
 
     useEffect(()  => {
         const getData = async () =>{
         const jsonValue = await AsyncStorage.getItem('location');
         const location = jsonValue != null ? JSON.parse(jsonValue) : null;
         dispatch(getLocationSuccess(location))
-        setData(location)
+        setData(true)
         }
         getData()
         

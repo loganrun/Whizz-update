@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 const initialState = {
-  locations: {},
+  restrooms: null,
   isLoading: false,
   error: null  
 };
@@ -17,7 +17,7 @@ const restroomsSlice = createSlice({
     getRestroomsSuccess(state, action) {
       const {payload} = action
       state.isLoading = false;
-      return { ...state, locations: { ...state.locations, payload } };
+      return { ...state, restrooms: { ...state.restrooms, payload } };
       //state.locations = action.payload; 
     },
     getRestroomsFailed(state, action) {

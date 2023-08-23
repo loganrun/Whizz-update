@@ -28,16 +28,17 @@ SplashScreen.preventAutoHideAsync();
 export default function App() {
 
   const [errorMsg, setErrorMsg] = useState(null);
-  const [loaded, setLoaded] = useState(true)
+  const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
     const getLocation = async () =>{
-      const jsonValue = JSON.stringify(location);let { status } = await Location.requestForegroundPermissionsAsync();
+      let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
         Alert.alert('Permission to access location was denied');
         return;
       }
       let location = await Location.getCurrentPositionAsync({});
+      const jsonValue = JSON.stringify(location);
       await AsyncStorage.setItem('location', jsonValue);
 
       setLoaded(true)
