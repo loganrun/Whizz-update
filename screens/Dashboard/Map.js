@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import MapView, { Callout, Marker, PROVIDER_GOOGLE} from 'react-native-maps';
+import MapView, { Callout, Marker,PROVIDER_GOOGLE} from 'react-native-maps';
 import {useDispatch, useSelector } from 'react-redux';
 import { getLocationStart, getLocationSuccess, getLocationFailed } from '../../locationSlice'
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -28,11 +28,13 @@ const CARD_WIDTH = width * 0.80;
 const SPACING_FOR_CARD_INSET = width * 0.1 - 10;
 //let newAn = scrollX(new Animated.Value(0)).current;
 //console.log(scrollX)
+const scrollX = new Animated.Value(0);
 let mapIndex = 0
 
 export default function Map() {
 
     const location = useSelector((state) => state.location.location)
+    const restroom = useSelector((state)=> state.restrooms)
     const navigation = useNavigation()
     const [bathroom, setBathroom] = useState([]);
     const [errorMsg, setErrorMsg] = useState('');
@@ -43,6 +45,8 @@ export default function Map() {
         latitudeDelta: 0.072,
         longitudeDelta: 0.070,
     });
+
+    console.log(restroom)
 
     useEffect(()=>{
         setRegion({
@@ -106,6 +110,18 @@ export default function Map() {
 
 const createMarkers= () => {
     console.log('createMarkers called')
+    bathroom?.map((marker, index) => (
+    <Marker
+    key={index}
+    coordinate={{latitude: marker.latitude, longitude: marker.longitude}}
+    image={premicon}
+    //image= {{require('../../assets/pin-verified.png')}}
+    //coordinate={marker.latlng}
+    title={marker.title}
+    description={marker.description}
+    >
+    </Marker>
+))
     //    // const { navigate } = this.props.navigation;
         //     return bathroom.map((item, index) => {
         
@@ -272,11 +288,11 @@ return (
     showsUserLocation={true}
     showsMyLocationButton={true}
     >
-    {bathroom.map((marker, index) => (
+    {bathroom?.map((marker, index) => (
     <Marker
     key={index}
     coordinate={{latitude: marker.latitude, longitude: marker.longitude}}
-    //image={{uri: 'custom_pin'}}
+    image={premicon}
     //image= {{require('../../assets/pin-verified.png')}}
     //coordinate={marker.latlng}
     title={marker.title}
@@ -284,7 +300,50 @@ return (
     />
 ))}
 
+
+
     </MapView>
+    {/* <View style={{ flex: 1, justifyContent: 'flex-end' }}>
+      <FlatList 
+        data={data}
+        keyExtractor={(item) => item.key}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        pagingEnabled
+        bounces={false}
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { x: scrollX } } }]
+        )}
+        scrollEventThrottle={16}
+      />
+    </View> */}
+    {/* <View>
+    <Animated.FlatList
+        ref={(ref) => this.flatListRef = ref}
+        data={bathroom}
+        horizontal
+        pagingEnabled
+        scrollEnabled
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{justifyContent: "center"}}
+        scrollEventThrottle={16}
+        decelerationRate = "fast"
+        style={styles.scrollView}
+        snapToInterval={CARD_WIDTH}
+        snapToAlignment="center"
+          // onScroll = {Animated.event([
+          //   {
+          //     nativeEvent: {
+          //       //x: this.animation}}
+          //       contentOffset: {
+          //         x: scrollX
+          //       }}      
+          // ], {useNativeDriver: true})}
+        renderItem={this.renderItem.bind(this)}
+        keyExtractor={(item, index) => `${item.id}`}
+          //extraData={this.state.bathroom}
+        getItemLayout={this.getItemLayout.bind(this)} />  
+    </View> */}
     </View>
     
     
