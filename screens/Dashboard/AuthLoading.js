@@ -14,12 +14,13 @@ const AuthLoading = () => {
     const navigation = useNavigation()
     const dispatch = useDispatch()
     const [region, setRegion] = useState({
-        latitude: 0.0,
-        longitude: 0.0,
-        latitudeDelta: 0.072,
-        longitudeDelta: 0.070,
+            latitude: 0.0,
+            longitude: 0.0,
+            latitudeDelta: 0.072,
+            longitudeDelta: 0.070,
     });
     const [data, setData] = useState(false);
+    const [ready, setReady] = useState(false)
 
     useEffect(()  => {
         const getData = async () =>{
@@ -32,6 +33,8 @@ const AuthLoading = () => {
             latitudeDelta: 0.072,
             longitudeDelta: 0.070,
         })
+        //setReady(true)
+
         }
         getData()
         
@@ -39,15 +42,14 @@ const AuthLoading = () => {
 
     useEffect(()=>{
 
-        if(!region){
-            return null
-        }
-
+        if(region.latitude || region.longitude !== 0.0){
+            
         const loadRestrooms = async () => {
     
             try{
         
             let params = {
+                per_page: 30,
                 lat: region.latitude,
                 lng: region.longitude
             };
@@ -61,8 +63,9 @@ const AuthLoading = () => {
                 let response1 = responses[0].data;
                 let response2 = responses[1].data;
                 let prelim = response2.concat(response1);
-        
+            
                 return prelim
+    
             })).catch(err =>{
                 console.log("error", err.message);
             })        
@@ -84,8 +87,10 @@ const AuthLoading = () => {
             console.log("error", e.message);
             }
         };
-
         loadRestrooms()
+    }
+
+    
 
     }, [region])
 

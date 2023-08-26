@@ -6,6 +6,7 @@ import {
     Text,
     Image,ActivityIndicator, StyleSheet,Dimensions, TouchableOpacity, Animated, FlatList
 } from "react-native";
+//import {Left,Right,Icon,Card,CardItem,Row,Button} from "native-base";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MapView, { Callout, Marker,PROVIDER_GOOGLE} from 'react-native-maps';
@@ -29,12 +30,13 @@ const SPACING_FOR_CARD_INSET = width * 0.1 - 10;
 //let newAn = scrollX(new Animated.Value(0)).current;
 //console.log(scrollX)
 const scrollX = new Animated.Value(0);
+let  flatListRef= null
 let mapIndex = 0
 
 export default function Map() {
 
     const location = useSelector((state) => state.location.location)
-    const restroom = useSelector((state)=> state.restrooms)
+    const restroom = useSelector((state)=> state.restrooms.restrooms)
     const navigation = useNavigation()
     const [bathroom, setBathroom] = useState([]);
     const [errorMsg, setErrorMsg] = useState('');
@@ -47,22 +49,40 @@ export default function Map() {
     });
 
     console.log(restroom)
-
     useEffect(()=>{
+
+        setBathroom(restroom)
         setRegion({
             latitude: location.loc.latitude,
             longitude: location.loc.longitude,
             latitudeDelta: 0.072,
             longitudeDelta: 0.070,
         })
+        console.log('restroom loaded')
 
-    }, [])
+    },[])
 
-    useEffect(()=>{
+    // useEffect(()=>{
+    //     setRegion({
+    //         latitude: location.loc.latitude,
+    //         longitude: location.loc.longitude,
+    //         latitudeDelta: 0.072,
+    //         longitudeDelta: 0.070,
+    //     })
 
-        loadRestrooms()
+    //     //console.log('map coords')
 
-    }, [])
+        
+    //     //setLoading(false)
+    //     //console.log('loading false')
+
+    // }, [])
+
+    // useEffect(()=>{
+
+    //     //loadRestrooms()
+
+    // }, [])
 
     const loadRestrooms = async () => {
     
@@ -98,30 +118,32 @@ export default function Map() {
     
         // }, []  
         // )
-        setBathroom(result)
-        setLoading(false)
+        //setBathroom(result)
+        // setLoading(false)
     
         } catch (e) {
         console.log("error", e.message);
         }
     };
 
-    
-
 const createMarkers= () => {
     console.log('createMarkers called')
-    bathroom?.map((marker, index) => (
+    return bathroom.map((marker, index) =>{ 
+        //console.log(marker)
+    return (
+        
     <Marker
     key={index}
     coordinate={{latitude: marker.latitude, longitude: marker.longitude}}
     image={premicon}
     //image= {{require('../../assets/pin-verified.png')}}
     //coordinate={marker.latlng}
-    title={marker.title}
-    description={marker.description}
-    >
-    </Marker>
-))
+    //title={marker.title}
+    //description={marker.description}
+    />
+    
+    
+)})
     //    // const { navigate } = this.props.navigation;
         //     return bathroom.map((item, index) => {
         
@@ -238,24 +260,112 @@ const createMarkers= () => {
         //     }
         // });
     }
+
+    const renderItem = ({ item }) => {
+
+        const distance = item.distance.toString().slice(0, 4)
+        if(item.verified){
+          return (
+            <View>
+              <TouchableOpacity 
+            //   onPress={() => {
+            //     const eventProp = {
+            //       id: item.id,
+            //       name: item.name,
+            //       street: item.street,
+            //       city: item.city,
+            //       distance: distance
+            //     }
+            //     Amplitude.logEventWithPropertiesAsync("RESTAURANT_SELECT", eventProp)
+            //   this.props.navigation.navigate("Pee", {
+            //     id: item.id,
+            //     item,
+            //     distance: distance,
+            //     currentLat: this.state.region.latitude,
+            //     currentLon: this.state.region.longitude
+            //   })}}
+              >
+              <Card style={styles.card}>
+              <Left style={{paddingLeft: 2}}>
+                <Image resizeMode={'cover'} source={{uri:item.lowerCard}} style={{width: 145, height: 155,flex:1}}/>
+              </Left> 
+                <CardItem style={{flexDirection: 'column', width: 180}}>
+                <Right style={{alignItems: 'flex-end',}}>
+                  <Text numberOfLines={1} style={{fontWeight: 'bold',textTransform: 'capitalize', color: '#173E81', fontSize: 15}}>{item.name}</Text>
+                  <Text numberOfLines={1} style={{fontSize:13}}>{item.street}</Text>
+                  <Text style={{width: 120, height: 30}}><Image resizeMode={'cover'} source={tprating}style={{width:120, height: 25}}/></Text>
+                  <Text>Distance: {distance} miles</Text>
+                  <Image resizeMode={'cover'} source={verified}style={{width: 160, height: 75}}/>
+                </Right>
+                </CardItem>
+            </Card>
+              </TouchableOpacity>
+            </View>
+        )
+    
+        }else{
+        
+        return (
+          <View>
+            <TouchableOpacity 
+            // onPress={() => {
+            //   const eventProp = {
+            //     id: item.id,
+            //     name: item.name,
+            //     street: item.street,
+            //     city: item.city,
+            //     distance: distance
+            //   }
+            //   Amplitude.logEventWithPropertiesAsync("RESTAURANT_SELECT", eventProp)
+            // this.props.navigation.navigate("Pee", {
+            //   id: item.id,
+            //   item,
+            //   distance: distance,
+            //   currentLat: this.state.region.latitude,
+            //   currentLon: this.state.region.longitude
+            // })}}
+            >
+            <Card style={styles.card}>
+              <Left style={{paddingLeft: 2}}>
+              <Image resizeMode={'cover'} source={genericFood}style={{width: 145, height: 155,flex:1}}/>
+              </Left>  
+                <CardItem style={{flexDirection: 'column', width: 180}}>
+                <Right style={{alignItems: 'flex-end',}}>
+                  <Text numberOfLines={1} style={{fontWeight: 'bold',textTransform: 'capitalize', color: '#173E81', fontSize: 15}}>{item.name}</Text>
+                  <Text numberOfLines={1} style={{fontSize:13, marginBottom:5}}>{item.street}</Text>
+                  <Text style={{width: 120, height: 30}}><Image resizeMode={'cover'} source={tprating}style={{width:120, height: 25}}/></Text>
+                  <Text>Distance: {distance} miles</Text>
+                  <Image resizeMode={'cover'} source={unverified}style={{width: 160, height: 75}}/> 
+                </Right>
+                </CardItem>
+            </Card>
+            </TouchableOpacity>
+          </View>
+      )
+          }
+      }
+    
+      const getItemLayout = (data, index)=>{
+        return { length: styles.card.width, offset: styles.card.width * index, index}
+      }
     
 
-    // const markers = [
-    //     {
-    //     coordinates: {
-    //         latitude: 34.024212,
-    //         longitude: -118.496475,
-    //     },
-    //     image: require('../../assets/pin-verified.png')
-    //     },
-    //     {
-    //     coordinates: {
-    //         latitude: 34.0129, 
-    //         longitude: -118.5017
-    //     },
-    //     image: require('../../assets/pin-verified.png')
-    //     }
-    // ]
+    const markers = [
+        {
+        coordinates: {
+            latitude: 34.024212,
+            longitude: -118.496475,
+        },
+        image: require('../../assets/pin-verified.png')
+        },
+        {
+        coordinates: {
+            latitude: 34.0129, 
+            longitude: -118.5017
+        },
+        image: require('../../assets/pin-verified.png')
+        }
+    ]
 // if(!region){
 //     return (
 //         <View style={[styles.container, styles.horizontal]}>
@@ -266,7 +376,7 @@ const createMarkers= () => {
 //   </View>
 //     )
 // }else{
-    if (loading) {
+    if (!bathroom && !region) {
         return (
         <View style={{flex: 1, justifyContent: 'center'}}>
             <ActivityIndicator size="large" />
@@ -288,24 +398,32 @@ return (
     showsUserLocation={true}
     showsMyLocationButton={true}
     >
-    {bathroom?.map((marker, index) => (
+    {bathroom.map((marker, index) => (
+        // console.log(marker)
     <Marker
     key={index}
     coordinate={{latitude: marker.latitude, longitude: marker.longitude}}
+    //coordinate={marker.latlng}
     image={premicon}
     //image= {{require('../../assets/pin-verified.png')}}
-    //coordinate={marker.latlng}
-    title={marker.title}
-    description={marker.description}
+    
+    //title={marker.title}
+    //description={marker.description}
     />
 ))}
+
+
+{/* {createMarkers()} */}
+
+
+
 
 
 
     </MapView>
     {/* <View style={{ flex: 1, justifyContent: 'flex-end' }}>
       <FlatList 
-        data={data}
+        data={bathroom}
         keyExtractor={(item) => item.key}
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -319,7 +437,7 @@ return (
     </View> */}
     {/* <View>
     <Animated.FlatList
-        ref={(ref) => this.flatListRef = ref}
+        ref={(ref) => flatListRef = ref}
         data={bathroom}
         horizontal
         pagingEnabled
@@ -339,10 +457,10 @@ return (
           //         x: scrollX
           //       }}      
           // ], {useNativeDriver: true})}
-        renderItem={this.renderItem.bind(this)}
+        renderItem={renderItem}
         keyExtractor={(item, index) => `${item.id}`}
           //extraData={this.state.bathroom}
-        getItemLayout={this.getItemLayout.bind(this)} />  
+        getItemLayout={getItemLayout} />  
     </View> */}
     </View>
     
@@ -366,17 +484,132 @@ horizontal: {
 map: {
     width: '100%',
     height: '100%'
-}
+},
+tool:{
+    width: 250,
+    height: 75,
+    backgroundColor: '#fff',
+    borderRadius: 10
+  },
+  searchBox: {
+    position:'absolute', 
+    marginTop: Platform.OS === 'ios' ? 40 : 20, 
+    flexDirection:"row",
+    backgroundColor: '#fff',
+    width: '90%',
+    alignSelf:'center',
+    borderRadius: 5,
+    padding: 10,
+    shadowColor: '#ccc',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+    elevation: 10,
+  },
+  chipsScrollView: {
+    position:'absolute', 
+    top:Platform.OS === 'ios' ? 90 : 80, 
+    paddingHorizontal:10
+  },
+  chipsIcon: {
+    marginRight: 5,
+  },
+  chipsItem: {
+    position:'absolute', 
+    top: 30, //Platform.OS === 'ios' ? 40 : 30, 
+    paddingHorizontal:10,
+    flexDirection:"row",
+    alignSelf:'center',
+    backgroundColor:'#fff', 
+    borderRadius:20,
+    padding:8,
+    paddingHorizontal:20, 
+    marginHorizontal:10,
+    height:35,
+    shadowColor: '#ccc',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+    elevation: 10
+    
+  },
+  scrollView: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    paddingVertical: 10,
+  },
+  endPadding: {
+    paddingRight: width - CARD_WIDTH,
+  },
+  card: {
+    // padding: 10,
+    flexDirection: "row",
+    elevation: 2,
+    backgroundColor: "#FFF",
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5,
+    marginHorizontal: 10,
+    shadowColor: "#000",
+    shadowRadius: 5,
+    shadowOpacity: 0.3,
+    shadowOffset: { x: 2, y: -2 },
+    height: CARD_HEIGHT,
+    width: CARD_WIDTH,
+    overflow: "hidden",
+    padding: 0
+  },
+  cardImage: {
+    flex: 3,
+    width: "100%",
+    height: "100%",
+    alignSelf: "center",
+  },
+  textContent: {
+    flex: 2,
+    padding: 10,
+  },
+  cardtitle: {
+    fontSize: 12,
+    // marginTop: 5,
+    fontWeight: "bold",
+  },
+  cardDescription: {
+    fontSize: 12,
+    color: "#444",
+  },
+  markerWrap: {
+    alignItems: "center",
+    justifyContent: "center",
+    width:50,
+    height:50,
+  },
+  marker: {
+    width: 30,
+    height: 30,
+  },
+  button: {
+    alignItems: 'center',
+    marginTop: 5
+  },
+  signIn: {
+      width: '100%',
+      padding:5,
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderRadius: 3
+  },
+  textSign: {
+      fontSize: 16,
+      fontWeight: 'bold',
+      color: '#173E81'
+      
+  }
 });
 
 const mapStyles = [
 
-    {
-      'height': '100%',
-      'width': '100%'
-  
-    },
-      
       {
           "featureType": "administrative",
           "elementType": "labels.text.fill",

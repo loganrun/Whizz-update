@@ -11,11 +11,13 @@ import {store} from './store'
 import * as SplashScreen from 'expo-splash-screen'
 
 
+
+
 //import AppLoading from 'expo-app-loading';
 //import { useFonts } from 'expo-font';
 //import {MainLayout} from './src/screens';
 import { Auth } from './screens/index';
-import {Maps} from './screens/index';
+// import {Maps} from './screens/index';
 import { Food } from './screens/index';
 import { Favorites } from './screens/index';
 import * as Location from 'expo-location';
@@ -28,7 +30,7 @@ SplashScreen.preventAutoHideAsync();
 export default function App() {
 
   const [errorMsg, setErrorMsg] = useState(null);
-  const [loaded, setLoaded] = useState(false)
+  const [loaded, setLoaded] = useState(true)
 
   useEffect(() => {
     const getLocation = async () =>{
