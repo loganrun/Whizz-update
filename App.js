@@ -6,6 +6,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import TabNavigator from "./Navigation/TabNavigator"
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {NativeBaseProvider} from 'native-base'
 import {Provider} from 'react-redux';
 import {store} from './store'
 import * as SplashScreen from 'expo-splash-screen'
@@ -72,6 +73,7 @@ function RootLayoutNav() {
   return (
 
     <Provider store={store}>
+      <NativeBaseProvider>
       <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator initialRouteName= {'Dashboard'} 
@@ -83,6 +85,7 @@ function RootLayoutNav() {
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
+    </NativeBaseProvider>
     </Provider>
   
       

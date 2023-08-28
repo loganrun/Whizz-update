@@ -6,6 +6,7 @@ import {
     Text,
     Image,ActivityIndicator, StyleSheet,Dimensions, TouchableOpacity, Animated, FlatList
 } from "react-native";
+import { FlashList } from '@shopify/flash-list';
 //import {Left,Right,Icon,Card,CardItem,Row,Button} from "native-base";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -17,6 +18,7 @@ import { useNavigation } from '@react-navigation/native';
 import restApi from "../../services/restroom"
 import refugeeApi from "../../services/refugee"
 import axios from 'axios'
+import Cards from '../../components/Cards'
 let tprating = require("../../assets/TPratings_5Stars.png")
 let genericFood = require('../../assets/SEARCH-lower-card-generic-img-1.png')
 let unverified = require('../../assets/mascot-01-unverified-349x161.png')
@@ -48,17 +50,18 @@ export default function Map() {
         longitudeDelta: 0.070,
     });
 
-    console.log(restroom)
+    //console.log(restroom)
     useEffect(()=>{
 
-        setBathroom(restroom)
         setRegion({
             latitude: location.loc.latitude,
             longitude: location.loc.longitude,
             latitudeDelta: 0.072,
             longitudeDelta: 0.070,
         })
-        console.log('restroom loaded')
+
+        setBathroom(restroom)
+        // console.log('restroom loaded')
 
     },[])
 
@@ -261,121 +264,96 @@ const createMarkers= () => {
         // });
     }
 
-    const renderItem = ({ item }) => {
+    // const renderItem = ({ item }) => (
+    //     //console.log(item)
 
-        const distance = item.distance.toString().slice(0, 4)
-        if(item.verified){
-          return (
-            <View>
-              <TouchableOpacity 
-            //   onPress={() => {
-            //     const eventProp = {
-            //       id: item.id,
-            //       name: item.name,
-            //       street: item.street,
-            //       city: item.city,
-            //       distance: distance
-            //     }
-            //     Amplitude.logEventWithPropertiesAsync("RESTAURANT_SELECT", eventProp)
-            //   this.props.navigation.navigate("Pee", {
-            //     id: item.id,
-            //     item,
-            //     distance: distance,
-            //     currentLat: this.state.region.latitude,
-            //     currentLon: this.state.region.longitude
-            //   })}}
-              >
-              <Card style={styles.card}>
-              <Left style={{paddingLeft: 2}}>
-                <Image resizeMode={'cover'} source={{uri:item.lowerCard}} style={{width: 145, height: 155,flex:1}}/>
-              </Left> 
-                <CardItem style={{flexDirection: 'column', width: 180}}>
-                <Right style={{alignItems: 'flex-end',}}>
-                  <Text numberOfLines={1} style={{fontWeight: 'bold',textTransform: 'capitalize', color: '#173E81', fontSize: 15}}>{item.name}</Text>
-                  <Text numberOfLines={1} style={{fontSize:13}}>{item.street}</Text>
-                  <Text style={{width: 120, height: 30}}><Image resizeMode={'cover'} source={tprating}style={{width:120, height: 25}}/></Text>
-                  <Text>Distance: {distance} miles</Text>
-                  <Image resizeMode={'cover'} source={verified}style={{width: 160, height: 75}}/>
-                </Right>
-                </CardItem>
-            </Card>
-              </TouchableOpacity>
-            </View>
-        )
-    
-        }else{
+
+    //      //const distance = item.distance.toString().slice(0, 4)
+    // //     if(item.verified){
+          
+    //         <View>
+    //           <TouchableOpacity 
+    //         //   onPress={() => {
+    //         //     const eventProp = {
+    //         //       id: item.id,
+    //         //       name: item.name,
+    //         //       street: item.street,
+    //         //       city: item.city,
+    //         //       distance: distance
+    //         //     }
+    //         //     Amplitude.logEventWithPropertiesAsync("RESTAURANT_SELECT", eventProp)
+    //         //   this.props.navigation.navigate("Pee", {
+    //         //     id: item.id,
+    //         //     item,
+    //         //     distance: distance,
+    //         //     currentLat: this.state.region.latitude,
+    //         //     currentLon: this.state.region.longitude
+    //         //   })}}
+    //           >
+    //           <Card style={styles.card}>
+    //           <Left style={{paddingLeft: 2}}>
+    //             <Image resizeMode={'cover'} source={{uri:item.lowerCard}} style={{width: 145, height: 155,flex:1}}/>
+    //           </Left> 
+    //             <CardItem style={{flexDirection: 'column', width: 180}}>
+    //             <Right style={{alignItems: 'flex-end',}}>
+    //               <Text numberOfLines={1} style={{fontWeight: 'bold',textTransform: 'capitalize', color: '#173E81', fontSize: 15}}>{item.name}</Text>
+    //               <Text numberOfLines={1} style={{fontSize:13}}>{item.street}</Text>
+    //               <Text style={{width: 120, height: 30}}><Image resizeMode={'cover'} source={tprating}style={{width:120, height: 25}}/></Text>
+    //               <Text>Distance: {distance} miles</Text>
+    //               <Image resizeMode={'cover'} source={verified}style={{width: 160, height: 75}}/>
+    //             </Right>
+    //             </CardItem>
+    //         </Card>
+    //           </TouchableOpacity>
+    //         </View>
         
-        return (
-          <View>
-            <TouchableOpacity 
-            // onPress={() => {
-            //   const eventProp = {
-            //     id: item.id,
-            //     name: item.name,
-            //     street: item.street,
-            //     city: item.city,
-            //     distance: distance
-            //   }
-            //   Amplitude.logEventWithPropertiesAsync("RESTAURANT_SELECT", eventProp)
-            // this.props.navigation.navigate("Pee", {
-            //   id: item.id,
-            //   item,
-            //   distance: distance,
-            //   currentLat: this.state.region.latitude,
-            //   currentLon: this.state.region.longitude
-            // })}}
-            >
-            <Card style={styles.card}>
-              <Left style={{paddingLeft: 2}}>
-              <Image resizeMode={'cover'} source={genericFood}style={{width: 145, height: 155,flex:1}}/>
-              </Left>  
-                <CardItem style={{flexDirection: 'column', width: 180}}>
-                <Right style={{alignItems: 'flex-end',}}>
-                  <Text numberOfLines={1} style={{fontWeight: 'bold',textTransform: 'capitalize', color: '#173E81', fontSize: 15}}>{item.name}</Text>
-                  <Text numberOfLines={1} style={{fontSize:13, marginBottom:5}}>{item.street}</Text>
-                  <Text style={{width: 120, height: 30}}><Image resizeMode={'cover'} source={tprating}style={{width:120, height: 25}}/></Text>
-                  <Text>Distance: {distance} miles</Text>
-                  <Image resizeMode={'cover'} source={unverified}style={{width: 160, height: 75}}/> 
-                </Right>
-                </CardItem>
-            </Card>
-            </TouchableOpacity>
-          </View>
-      )
-          }
-      }
+    //       )
+    // //     }else{
+        
+    // //     return (
+    // //       <View>
+    // //         <TouchableOpacity 
+    // //         // onPress={() => {
+    // //         //   const eventProp = {
+    // //         //     id: item.id,
+    // //         //     name: item.name,
+    // //         //     street: item.street,
+    // //         //     city: item.city,
+    // //         //     distance: distance
+    // //         //   }
+    // //         //   Amplitude.logEventWithPropertiesAsync("RESTAURANT_SELECT", eventProp)
+    // //         // this.props.navigation.navigate("Pee", {
+    // //         //   id: item.id,
+    // //         //   item,
+    // //         //   distance: distance,
+    // //         //   currentLat: this.state.region.latitude,
+    // //         //   currentLon: this.state.region.longitude
+    // //         // })}}
+    // //         >
+    // //         <Card style={styles.card}>
+    // //           <Left style={{paddingLeft: 2}}>
+    // //           <Image resizeMode={'cover'} source={genericFood}style={{width: 145, height: 155,flex:1}}/>
+    // //           </Left>  
+    // //             <CardItem style={{flexDirection: 'column', width: 180}}>
+    // //             <Right style={{alignItems: 'flex-end',}}>
+    // //               <Text numberOfLines={1} style={{fontWeight: 'bold',textTransform: 'capitalize', color: '#173E81', fontSize: 15}}>{item.name}</Text>
+    // //               <Text numberOfLines={1} style={{fontSize:13, marginBottom:5}}>{item.street}</Text>
+    // //               <Text style={{width: 120, height: 30}}><Image resizeMode={'cover'} source={tprating}style={{width:120, height: 25}}/></Text>
+    // //               <Text>Distance: {distance} miles</Text>
+    // //               <Image resizeMode={'cover'} source={unverified}style={{width: 160, height: 75}}/> 
+    // //             </Right>
+    // //             </CardItem>
+    // //         </Card>
+    // //         </TouchableOpacity>
+    // //       </View>
+    // //   )
+    // //       }
+    //   }
     
       const getItemLayout = (data, index)=>{
         return { length: styles.card.width, offset: styles.card.width * index, index}
       }
     
-
-    const markers = [
-        {
-        coordinates: {
-            latitude: 34.024212,
-            longitude: -118.496475,
-        },
-        image: require('../../assets/pin-verified.png')
-        },
-        {
-        coordinates: {
-            latitude: 34.0129, 
-            longitude: -118.5017
-        },
-        image: require('../../assets/pin-verified.png')
-        }
-    ]
-// if(!region){
-//     return (
-//         <View style={[styles.container, styles.horizontal]}>
-//     <ActivityIndicator />
-//     <ActivityIndicator size="large" />
-//     <ActivityIndicator size="small" color="#0000ff" />
-//     <ActivityIndicator size="large" color="#00ff00" />
-//   </View>
-//     )
-// }else{
     if (!bathroom && !region) {
         return (
         <View style={{flex: 1, justifyContent: 'center'}}>
@@ -392,33 +370,18 @@ return (
         latitude: location.loc.latitude, //34.052235, //region.latitude,//34.052235, //this.props.location.latitude,location.loc.latitude
         latitudeDelta: 0.1564, //0.072,//{0.022},
         longitudeDelta: 0.0636//0.070,//{0.021}
-        //region}
     }}
     customMapStyle={mapStyles}
     showsUserLocation={true}
     showsMyLocationButton={true}
     >
     {bathroom.map((marker, index) => (
-        // console.log(marker)
     <Marker
     key={index}
     coordinate={{latitude: marker.latitude, longitude: marker.longitude}}
-    //coordinate={marker.latlng}
     image={premicon}
-    //image= {{require('../../assets/pin-verified.png')}}
-    
-    //title={marker.title}
-    //description={marker.description}
     />
 ))}
-
-
-{/* {createMarkers()} */}
-
-
-
-
-
 
     </MapView>
     {/* <View style={{ flex: 1, justifyContent: 'flex-end' }}>
@@ -435,20 +398,20 @@ return (
         scrollEventThrottle={16}
       />
     </View> */}
-    {/* <View>
-    <Animated.FlatList
+    <View>
+    <FlashList
         ref={(ref) => flatListRef = ref}
         data={bathroom}
         horizontal
-        pagingEnabled
-        scrollEnabled
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{justifyContent: "center"}}
-        scrollEventThrottle={16}
-        decelerationRate = "fast"
-        style={styles.scrollView}
-        snapToInterval={CARD_WIDTH}
-        snapToAlignment="center"
+        // pagingEnabled
+        // scrollEnabled
+        // showsHorizontalScrollIndicator={false}
+        // contentContainerStyle={{justifyContent: "center"}}
+        // scrollEventThrottle={16}
+        // decelerationRate = "fast"
+        // style={styles.scrollView}
+        // snapToInterval={CARD_WIDTH}
+        // snapToAlignment="center"
           // onScroll = {Animated.event([
           //   {
           //     nativeEvent: {
@@ -457,11 +420,13 @@ return (
           //         x: scrollX
           //       }}      
           // ], {useNativeDriver: true})}
-        renderItem={renderItem}
+        renderItem={({item})=>{return <Cards item={item}/> }}
+        estimatedItemSize={50}
         keyExtractor={(item, index) => `${item.id}`}
           //extraData={this.state.bathroom}
-        getItemLayout={getItemLayout} />  
-    </View> */}
+        //getItemLayout={getItemLayout} 
+        />  
+    </View>
     </View>
     
     
