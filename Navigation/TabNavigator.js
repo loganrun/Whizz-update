@@ -2,7 +2,11 @@ import { View, Text,Dimensions } from 'react-native'
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons, Ionicons, Feather } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import {Map, Food, Favorites} from '../screens/index'
+import Logo from "../components/Logo"
+import Logo2 from "../components/Logo2"
+import Logo3 from "../components/Logo3"
 
 
 const {width} = Dimensions.get('window')
@@ -12,6 +16,8 @@ const TAB_WIDTH = TAB_BAR_WIDTH/3
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
+  const navigation = useNavigation()
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -37,23 +43,24 @@ const TabNavigator = () => {
         component={Map} 
         options={{
           headerShown: false,
-          tabBarLabel: "",
+          headerTitle: ()=><Logo2 navigation={navigation}/>,
+          tabBarLabel: "Restrooms",
           tabBarIcon: ({focused}) => (
             focused? <View
             style={{
-              height: 40,
-              width: 40,
-              backgroundColor:'#d20117',
-              justifyContent: 'center',
-              alignItems: 'center',
-              borderRadius:50,
-              marginTop: 20,
+              //height: 40,
+              //width: 40,
+              //backgroundColor:'#3480CB',
+              //justifyContent: 'center',
+              //alignItems: 'center',
+              //borderRadius:50,
+              //marginTop: 20,
             }}
             >
-              <Ionicons name="flame-outline" size={30} color='white' />
+              <Ionicons name="ios-search" size={30} color='#3480CB' />
             </View> : 
-            <View style={{marginTop:5}}>
-              <Ionicons name="flame-outline" size={30} color='#d20117' />
+            <View >
+              <Ionicons name="ios-search" size={30} color='gray' />
             </View>
         
           )
@@ -64,22 +71,22 @@ const TabNavigator = () => {
         component={Food} 
         options={{
           headerShown: false,
-          tabBarLabel: "",
+          tabBarLabel: "Food",
           tabBarIcon: ({focused}) => (
             focused? <View
             style={{
-              height: 40,
-              width: 40,
-              backgroundColor:'#d20117',
-              justifyContent: 'center',
-              alignItems: 'center',
-              borderRadius:50,
-              marginTop:20
+              // height: 40,
+              // width: 40,
+              // backgroundColor:'#d20117',
+              // justifyContent: 'center',
+              // alignItems: 'center',
+              // borderRadius:50,
+              // marginTop:20
             }}
             >
-              <MaterialCommunityIcons name="cards-heart-outline" size={30} color='white' />
-            </View> : <View style={{marginTop:5}}>
-              <MaterialCommunityIcons name="cards-heart-outline" size={30} color='#d20117' />
+              <Ionicons name="ios-restaurant" size={30} color='#3480CB' />
+            </View> : <View>
+              <Ionicons name="ios-restaurant" size={30} color='gray' />
             </View>
              
           )
@@ -90,22 +97,22 @@ const TabNavigator = () => {
         component={Favorites} 
         options={{
           headerShown: false,
-          tabBarLabel: "",
+          tabBarLabel: "Favorite",
           tabBarIcon: ({focused}) => (
             focused? <View
             style={{
-              height: 40,
-              width: 40,
-              backgroundColor:'#d20117',
-              justifyContent: 'center',
-              alignItems: 'center',
-              borderRadius:50,
-              marginTop:20
+              // height: 40,
+              // width: 40,
+              // backgroundColor:'#d20117',
+              // justifyContent: 'center',
+              // alignItems: 'center',
+              // borderRadius:50,
+              // marginTop:20
             }}
             >
-              <MaterialCommunityIcons name="crown-outline" size={30} color="white" />
-            </View> : <View style={{marginTop:5}}>
-            <MaterialCommunityIcons name="crown-outline" size={32} color="#d20117" />
+              <Ionicons name="ios-heart" size={30} color='#3480CB' />
+            </View> : <View>
+            <Ionicons name="ios-heart" size={32} color='gray' />
             </View>
              
           )

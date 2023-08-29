@@ -21,6 +21,7 @@ import { Auth } from './screens/index';
 // import {Maps} from './screens/index';
 import { Food } from './screens/index';
 import { Favorites } from './screens/index';
+import {Pee}from './screens/index'
 import * as Location from 'expo-location';
 
 
@@ -80,6 +81,7 @@ function RootLayoutNav() {
         screenOptions={{headerShown: true, gestureEnabled: true}}>
           <Stack.Screen name="Auth" component={Auth}/>
           <Stack.Screen name="Map" component={TabNavigator}/>
+          <Stack.Screen name="RestRoom" component={Pee}/>
           <Stack.Screen name="Food" component={Food}/>
           <Stack.Screen name="Favourites" component={Favorites}/>
         </Stack.Navigator>

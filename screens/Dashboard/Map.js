@@ -312,24 +312,24 @@ const createMarkers= () => {
         
     // //     return (
     // //       <View>
-    // //         <TouchableOpacity 
-    // //         // onPress={() => {
-    // //         //   const eventProp = {
-    // //         //     id: item.id,
-    // //         //     name: item.name,
-    // //         //     street: item.street,
-    // //         //     city: item.city,
-    // //         //     distance: distance
-    // //         //   }
-    // //         //   Amplitude.logEventWithPropertiesAsync("RESTAURANT_SELECT", eventProp)
-    // //         // this.props.navigation.navigate("Pee", {
-    // //         //   id: item.id,
-    // //         //   item,
-    // //         //   distance: distance,
-    // //         //   currentLat: this.state.region.latitude,
-    // //         //   currentLon: this.state.region.longitude
-    // //         // })}}
-    // //         >
+            // <TouchableOpacity 
+            // // onPress={() => {
+            // //   const eventProp = {
+            // //     id: item.id,
+            // //     name: item.name,
+            // //     street: item.street,
+            // //     city: item.city,
+            // //     distance: distance
+            // //   }
+            // //   Amplitude.logEventWithPropertiesAsync("RESTAURANT_SELECT", eventProp)
+            // // this.props.navigation.navigate("Pee", {
+            // //   id: item.id,
+            // //   item,
+            // //   distance: distance,
+            // //   currentLat: this.state.region.latitude,
+            // //   currentLon: this.state.region.longitude
+            // // })}}
+            // >
     // //         <Card style={styles.card}>
     // //           <Left style={{paddingLeft: 2}}>
     // //           <Image resizeMode={'cover'} source={genericFood}style={{width: 145, height: 155,flex:1}}/>
@@ -349,11 +349,7 @@ const createMarkers= () => {
     // //   )
     // //       }
     //   }
-    
-      const getItemLayout = (data, index)=>{
-        return { length: styles.card.width, offset: styles.card.width * index, index}
-      }
-    
+        
     if (!bathroom && !region) {
         return (
         <View style={{flex: 1, justifyContent: 'center'}}>
@@ -398,20 +394,20 @@ return (
         scrollEventThrottle={16}
       />
     </View> */}
-    <View>
+    <View style={styles.list}>
     <FlashList
         ref={(ref) => flatListRef = ref}
         data={bathroom}
         horizontal
-        // pagingEnabled
-        // scrollEnabled
-        // showsHorizontalScrollIndicator={false}
-        // contentContainerStyle={{justifyContent: "center"}}
-        // scrollEventThrottle={16}
-        // decelerationRate = "fast"
-        // style={styles.scrollView}
-        // snapToInterval={CARD_WIDTH}
-        // snapToAlignment="center"
+        pagingEnabled
+        scrollEnabled
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{justifyContent: "center"}}
+        scrollEventThrottle={16}
+        decelerationRate = "fast"
+        style={styles.scrollView}
+        snapToInterval={CARD_WIDTH}
+        snapToAlignment="center"
           // onScroll = {Animated.event([
           //   {
           //     nativeEvent: {
@@ -421,10 +417,9 @@ return (
           //       }}      
           // ], {useNativeDriver: true})}
         renderItem={({item})=>{return <Cards item={item}/> }}
-        estimatedItemSize={50}
+        estimatedItemSize={288}
         keyExtractor={(item, index) => `${item.id}`}
-          //extraData={this.state.bathroom}
-        //getItemLayout={getItemLayout} 
+        extraData={bathroom}
         />  
     </View>
     </View>
@@ -441,12 +436,23 @@ container: {
     alignItems: 'center',
     justifyContent: 'center',
 },
+list:{
+    height: 150,
+    //marginBottom: 20,
+    marginLeft: 0,
+    marginRight: 0,
+    //width: CARD_WIDTH,
+    
+    
+
+},
 horizontal: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     padding: 10,
   },
 map: {
+    flex:1,
     width: '100%',
     height: '100%'
 },

@@ -6,7 +6,9 @@ import {
     
     Image,ActivityIndicator, StyleSheet,Dimensions, TouchableOpacity, Animated, FlatList
 } from "react-native";
-import {Left,Right,Icon,Card,CardItem,Row,Button} from "native-base";
+import {HStack,Card,VStack} from "native-base";
+import { useNavigation } from '@react-navigation/native';
+import {useDispatch, useSelector } from 'react-redux';
 let tprating = require("../assets/TPratings_5Stars.png")
 let genericFood = require('../assets/SEARCH-lower-card-generic-img-1.png')
 let unverified = require('../assets/mascot-01-unverified-349x161.png')
@@ -20,6 +22,8 @@ const SPACING_FOR_CARD_INSET = width * 0.1 - 10;
 
 export default function MyListItem(props) {
     const distance = props.item.distance.toString().slice(0, 4)
+    const location = useSelector((state) => state.location.location)
+    const navigation = useNavigation()
     
     return (
         // <View>
@@ -41,20 +45,36 @@ export default function MyListItem(props) {
         // </View>
         
         <View>
-        {/* <Text>{props.item.name}</Text>
-        <Text>Count: </Text>
-        <Button title="Increment count" /> */}
-
-    <Card style={styles.card}>
-    {/* <Right style={{alignItems: 'flex-end',}}> */}
-                 <Text numberOfLines={1} style={{fontWeight: 'bold',textTransform: 'capitalize', color: '#173E81', fontSize: 15}}>{props.item.name}</Text>
-                 <Text numberOfLines={1} style={{fontSize:13, marginBottom:5}}>{ props.item.street}</Text>
-                 <Text style={{width: 120, height: 30}}><Image resizeMode={'cover'} source={tprating}style={{width:120, height: 25}}/></Text>
-                 <Text>Distance: {distance} miles</Text>
-                 <Image resizeMode={'cover'} source={unverified}style={{width: 160, height: 75}}/> 
+     <TouchableOpacity 
+            onPress={() => {
+              const eventProp = {
+                id: props.item.id,
+                name: props.item.name,
+                street: props.item.street,
+                city: props.item.city,
+                distance: distance
+              }
             
-
+            navigation.navigate("RestRoom", {
+              id: props.item.id,
+              item: props.item,
+              distance: distance,
+              currentLat: location.loc.latitude,
+              currentLon: location.loc.longitude
+            })}}
+            >
+    <Card style={styles.card}>
+      <HStack style={{paddingTop: 5,paddingRight: 5}}>
+      <Image resizeMode={'contain'} source={verified}style={{width: 120, height: 120}}/> 
+      </HStack>
+      <VStack style={{paddingTop: 30, paddingRight:4}}>
+      <Text numberOfLines={1} style={{fontWeight: 'bold',textTransform: 'capitalize', color: '#173E81', fontSize: 15}}>{props.item.name}</Text>
+        <Text numberOfLines={1} style={{fontSize:13, marginBottom:5}}>{ props.item.street}</Text>
+        <Text>Distance: {distance} miles</Text>
+        <Text style={{width: 120, height: 30}}><Image resizeMode={'cover'} source={tprating}style={{width:120, height: 25}}/></Text>
+      </VStack>
     </Card>
+    </TouchableOpacity>
 
     </View>
         
@@ -240,10 +260,10 @@ const styles = StyleSheet.create({
         // padding: 10,
         flexDirection: "row",
         elevation: 2,
-        backgroundColor: "#FFF",
+        //backgroundColor: "#FFF",
         borderTopLeftRadius: 5,
         borderTopRightRadius: 5,
-        marginHorizontal: 10,
+        //marginHorizontal: 10,
         shadowColor: "#000",
         shadowRadius: 5,
         shadowOpacity: 0.3,
