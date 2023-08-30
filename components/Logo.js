@@ -36,7 +36,7 @@ class LogoTitle extends React.Component {
       flexDirection:  "row",
       alignItems: 'center',
       justifyContent: 'center',
-      //backgroundColor: "#3480CB",
+      backgroundColor: "#3480CB",
       //paddingTop: 10,
       //paddingBottom:5,
       //marginLeft: 0,

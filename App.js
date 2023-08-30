@@ -10,6 +10,7 @@ import {NativeBaseProvider} from 'native-base'
 import {Provider} from 'react-redux';
 import {store} from './store'
 import * as SplashScreen from 'expo-splash-screen'
+import Logo2 from './components/Logo2'
 
 
 
@@ -78,10 +79,20 @@ function RootLayoutNav() {
       <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator initialRouteName= {'Dashboard'} 
-        screenOptions={{headerShown: true, gestureEnabled: true}}>
-          <Stack.Screen name="Auth" component={Auth}/>
-          <Stack.Screen name="Map" component={TabNavigator}/>
-          <Stack.Screen name="RestRoom" component={Pee}/>
+        screenOptions={{headerShown: false, gestureEnabled: true}}>
+          <Stack.Screen name="Auth" options={{headerShown: true,
+          headerTitle: 'Setup',
+          headerStyle: {
+            backgroundColor: '#3480CB',
+          },
+          headerTintColor: '#ffff',}}  component={Auth}/>
+          <Stack.Screen name="Map"   component={TabNavigator}/>
+          <Stack.Screen name="RestRoom" options={{headerShown: true,
+          headerTitle: 'RestRoom',
+          headerStyle: {
+            backgroundColor: '#3480CB',
+          },
+          headerTintColor: '#ffff',}}  component={Pee}/>
           <Stack.Screen name="Food" component={Food}/>
           <Stack.Screen name="Favourites" component={Favorites}/>
         </Stack.Navigator>

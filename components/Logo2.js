@@ -21,13 +21,13 @@ class LogoTitle extends React.Component {
 
   const styles = StyleSheet.create({
     header:{
-      //width:  '100%',
-      //height: '305%',
+      width:  '100%',
+      height: 75,
       flexDirection:  "row",
       alignItems: 'center',
       justifyContent: 'center',
-      //backgroundColor: "#3480CB",
-      paddingTop: 10,
+      backgroundColor: "#3480CB",
+      paddingTop: 20,
       //paddingBottom:5
     }
   })

@@ -10,13 +10,13 @@ class LogoTitle extends React.Component {
       const openMenu = () => navigation.openDrawer()
       return (
         <View style={styles.header}>
-          <Ionicons
+          {/* <Ionicons
             style={{ position: 'absolute', left: 16 }}
             onPress={openMenu}
             name='md-menu'
             size={30}
             color={"#fff"}
-          />
+          /> */}
         <Image
           source={require('../assets/white_logo.png')}
           style={{height: 60, width: 60}}
@@ -35,7 +35,7 @@ class LogoTitle extends React.Component {
       flexDirection:  "row",
       alignItems: 'center',
       justifyContent: 'center',
-      //backgroundColor: "#3480CB",
+      backgroundColor: "#3480CB",
       //paddingTop: 10,
       //paddingBottom:5
     }

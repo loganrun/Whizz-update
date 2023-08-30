@@ -5,7 +5,7 @@ import { MaterialCommunityIcons, Ionicons, Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import {Map, Food, Favorites} from '../screens/index'
 import Logo from "../components/Logo"
-import Logo2 from "../components/Logo2"
+import Logo2 from "../components/Logo3"
 import Logo3 from "../components/Logo3"
 
 
@@ -42,7 +42,9 @@ const TabNavigator = () => {
         name="Map" 
         component={Map} 
         options={{
-          headerShown: false,
+          
+          headerShown: true,
+          header: () =><Logo2/>, 
           headerTitle: ()=><Logo2 navigation={navigation}/>,
           tabBarLabel: "Restrooms",
           tabBarIcon: ({focused}) => (
@@ -70,7 +72,12 @@ const TabNavigator = () => {
         name="Food" 
         component={Food} 
         options={{
-          headerShown: false,
+          headerShown: true,
+          headerTitle: 'Food',
+          headerStyle: {
+            backgroundColor: '#3480CB',
+          },
+          headerTintColor: '#ffff',
           tabBarLabel: "Food",
           tabBarIcon: ({focused}) => (
             focused? <View
@@ -96,7 +103,12 @@ const TabNavigator = () => {
         name="Favorites" 
         component={Favorites} 
         options={{
-          headerShown: false,
+          headerShown: true,
+          headerTitle: 'Favorite',
+          headerStyle: {
+            backgroundColor: '#3480CB',
+          },
+          headerTintColor: '#ffff',
           tabBarLabel: "Favorite",
           tabBarIcon: ({focused}) => (
             focused? <View
