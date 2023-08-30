@@ -27,18 +27,19 @@ let premicon = require('../../assets/pin-verified.png')
 let regIcon = require('../../assets/pin-unverified.png')
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = 180;
-const CARD_WIDTH = width * 0.80;
+const CARD_WIDTH = width;
 const SPACING_FOR_CARD_INSET = width * 0.1 - 10;
 //let newAn = scrollX(new Animated.Value(0)).current;
 //console.log(scrollX)
 const scrollX = new Animated.Value(0);
-let  flatListRef= null
+ 
 let mapIndex = 0
 
 export default function Map() {
 
     const location = useSelector((state) => state.location.location)
     const restroom = useSelector((state)=> state.restrooms.restrooms)
+    const flashListRef = useRef(null);
     const navigation = useNavigation()
     const [bathroom, setBathroom] = useState([]);
     const [errorMsg, setErrorMsg] = useState('');
@@ -376,6 +377,11 @@ return (
     key={index}
     coordinate={{latitude: marker.latitude, longitude: marker.longitude}}
     image={premicon}
+    onPress={() => {
+        
+        flashListRef.current.scrollToIndex({animated: true, index: index})
+        
+    }}
     />
 ))}
 
@@ -396,7 +402,7 @@ return (
     </View> */}
     <View style={styles.list}>
     <FlashList
-        ref={(ref) => flatListRef = ref}
+        ref={flashListRef}
         data={bathroom}
         horizontal
         pagingEnabled
@@ -527,7 +533,7 @@ tool:{
     shadowOpacity: 0.3,
     shadowOffset: { x: 2, y: -2 },
     height: CARD_HEIGHT,
-    width: CARD_WIDTH,
+    width: '100%',
     overflow: "hidden",
     padding: 0
   },

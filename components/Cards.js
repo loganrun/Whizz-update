@@ -17,7 +17,7 @@ let premicon = require('../assets/pin-verified.png')
 let regIcon = require('../assets/pin-unverified.png')
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = 180;
-const CARD_WIDTH = width * 0.80;
+const CARD_WIDTH = width;
 const SPACING_FOR_CARD_INSET = width * 0.1 - 10;
 
 export default function MyListItem(props) {
