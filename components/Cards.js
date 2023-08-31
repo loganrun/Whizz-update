@@ -45,23 +45,8 @@ export default function MyListItem(props) {
         // </View>
         
         <View>
-     <TouchableOpacity 
-            onPress={() => {
-              const eventProp = {
-                id: props.item.id,
-                name: props.item.name,
-                street: props.item.street,
-                city: props.item.city,
-                distance: distance
-              }
-            
-            navigation.navigate("RestRoom", {
-              id: props.item.id,
-              item: props.item,
-              distance: distance,
-              currentLat: location.loc.latitude,
-              currentLon: location.loc.longitude
-            })}}
+    <TouchableOpacity 
+            onPress={() => {navigation.navigate("RestRoom", {item})}}
             >
     <Card style={styles.card}>
       <HStack style={{paddingTop: 5,paddingRight: 5}}>

@@ -1,13 +1,83 @@
+import { useRef, useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import {
+  View,
+  Platform,
+  Text,
+  Image,ActivityIndicator, StyleSheet,Dimensions, TouchableOpacity, Animated, FlatList
+} from "react-native";
+import MapView, { Callout, Marker,PROVIDER_GOOGLE} from 'react-native-maps';
+import {useDispatch, useSelector } from 'react-redux';
+import { getLocationStart, getLocationSuccess, getLocationFailed } from '../../locationSlice'
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+//import { useNavigation } from '@react-navigation/native';
+let premicon = require('../../assets/pin-verified.png')
+const { width, height } = Dimensions.get("window");
+const CARD_HEIGHT = 180;
+const CARD_WIDTH = width;
+const SPACING_FOR_CARD_INSET = width * 0.1 - 10;
 
-export default function Pee() {
-  return (
-    <View style={styles.container}>
-      <Text>Hello from Pee!</Text>
-      <StatusBar style="auto" />
+export default function Pee({route, navigation}) {
+  const location = useSelector((state) => state.location.location)
+  const {props} = route.params
+  const  item = props;
+  console.log(item)
+
+  const flashListRef = useRef(null);
+  //const navigation = useNavigation()
+  const [errorMsg, setErrorMsg] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [region, setRegion] = useState({
+        latitude: 0.0,
+        longitude: 0.0,
+        latitudeDelta: 0.072,
+        longitudeDelta: 0.070,
+    });
+
+    useEffect(()=>{
+
+      setRegion({
+          latitude: location.loc.latitude,
+          longitude: location.loc.longitude,
+          latitudeDelta: 0.072,
+          longitudeDelta: 0.070,
+      })
+
+      // console.log('restroom loaded')
+
+  },[])
+
+
+  if (!location) {
+    return (
+    <View style={{flex: 1, justifyContent: 'center'}}>
+        <ActivityIndicator size="large" />
     </View>
-  );
+    );
+}
+
+return (
+<View style={styles.container}>
+<MapView style={styles.map}
+initialRegion={{
+    longitude:location.loc.longitude,//-118.243683, //region.longitude,//-118.243683, //this.props.location.longitude,
+    latitude: location.loc.latitude, //34.052235, //region.latitude,//34.052235, //this.props.location.latitude,location.loc.latitude
+    latitudeDelta: 0.1564, //0.072,//{0.022},
+    longitudeDelta: 0.0636//0.070,//{0.021}
+}}
+customMapStyle={mapStyles}
+showsUserLocation={true}
+showsMyLocationButton={true}
+>
+
+{/* <Marker
+key={index}
+coordinate={{latitude: marker.latitude, longitude: marker.longitude}}
+image={premicon}
+/> */}
+</MapView>
+</View>
+);
 }
 
 const styles = StyleSheet.create({
@@ -17,7 +87,290 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  list:{
+    height: 150,
+    //marginBottom: 20,
+    marginLeft: 0,
+    marginRight: 0,
+    //width: CARD_WIDTH,
+    
+    
+  
+  },
+  horizontal: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10,
+  },
+  map: {
+    flex:1,
+    width: '100%',
+    height: '100%'
+  },
+  tool:{
+    width: 250,
+    height: 75,
+    backgroundColor: '#fff',
+    borderRadius: 10
+  },
+  searchBox: {
+    position:'absolute', 
+    marginTop: Platform.OS === 'ios' ? 40 : 20, 
+    flexDirection:"row",
+    backgroundColor: '#fff',
+    width: '90%',
+    alignSelf:'center',
+    borderRadius: 5,
+    padding: 10,
+    shadowColor: '#ccc',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+    elevation: 10,
+  },
+  chipsScrollView: {
+    position:'absolute', 
+    top:Platform.OS === 'ios' ? 90 : 80, 
+    paddingHorizontal:10
+  },
+  chipsIcon: {
+    marginRight: 5,
+  },
+  chipsItem: {
+    position:'absolute', 
+    top: 30, //Platform.OS === 'ios' ? 40 : 30, 
+    paddingHorizontal:10,
+    flexDirection:"row",
+    alignSelf:'center',
+    backgroundColor:'#fff', 
+    borderRadius:20,
+    padding:8,
+    paddingHorizontal:20, 
+    marginHorizontal:10,
+    height:35,
+    shadowColor: '#ccc',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+    elevation: 10
+    
+  },
+  scrollView: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    paddingVertical: 10,
+  },
+  endPadding: {
+    paddingRight: width - CARD_WIDTH,
+  },
+  card: {
+    // padding: 10,
+    flexDirection: "row",
+    elevation: 2,
+    backgroundColor: "#FFF",
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5,
+    marginHorizontal: 10,
+    shadowColor: "#000",
+    shadowRadius: 5,
+    shadowOpacity: 0.3,
+    shadowOffset: { x: 2, y: -2 },
+    height: CARD_HEIGHT,
+    width: '100%',
+    overflow: "hidden",
+    padding: 0
+  },
+  cardImage: {
+    flex: 3,
+    width: "100%",
+    height: "100%",
+    alignSelf: "center",
+  },
+  textContent: {
+    flex: 2,
+    padding: 10,
+  },
+  cardtitle: {
+    fontSize: 12,
+    // marginTop: 5,
+    fontWeight: "bold",
+  },
+  cardDescription: {
+    fontSize: 12,
+    color: "#444",
+  },
+  markerWrap: {
+    alignItems: "center",
+    justifyContent: "center",
+    width:50,
+    height:50,
+  },
+  marker: {
+    width: 30,
+    height: 30,
+  },
+  button: {
+    alignItems: 'center',
+    marginTop: 5
+  },
+  signIn: {
+      width: '100%',
+      padding:5,
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderRadius: 3
+  },
+  textSign: {
+      fontSize: 16,
+      fontWeight: 'bold',
+      color: '#173E81'
+      
+  }
+  
 });
+
+
+
+const mapStyles = [
+
+    {
+        "featureType": "administrative",
+        "elementType": "labels.text.fill",
+        "stylers": [
+            {
+                "color": "#525f66"
+            }
+        ]
+    },
+    {
+        "featureType": "road.highway",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "color": "#8fa7b3"
+            },
+            {
+                "lightness": "44"
+            }
+        ]
+    },
+    {
+        "featureType": "road.highway",
+        "elementType": "geometry.stroke",
+        "stylers": [
+            {
+                "color": "#667780"
+            }
+        ]
+    },
+    {
+        "featureType": "road.highway",
+        "elementType": "labels.text.fill",
+        "stylers": [
+            {
+                "color": "#333333"
+            }
+        ]
+    },
+    {
+        "featureType": "road.highway",
+        "elementType": "labels.text.stroke",
+        "stylers": [
+            {
+                "color": "#8fa7b3"
+            },
+            {
+                "gamma": 2
+            }
+        ]
+    },
+    {
+        "featureType": "road.arterial",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "color": "#a3becc"
+            }
+        ]
+    },
+    {
+        "featureType": "road.arterial",
+        "elementType": "geometry.stroke",
+        "stylers": [
+            {
+                "color": "#7a8f99"
+            }
+        ]
+    },
+    {
+        "featureType": "road.arterial",
+        "elementType": "labels.text.fill",
+        "stylers": [
+            {
+                "color": "#555555"
+            }
+        ]
+    },
+    {
+        "featureType": "road.local",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "color": "#a3becc"
+            }
+        ]
+    },
+    {
+        "featureType": "road.local",
+        "elementType": "geometry.stroke",
+        "stylers": [
+            {
+                "color": "#7a8f99"
+            }
+        ]
+    },
+    {
+        "featureType": "road.local",
+        "elementType": "labels.text.fill",
+        "stylers": [
+            {
+                "color": "#555555"
+            }
+        ]
+    },
+    {
+        "featureType": "transit",
+        "elementType": "labels.text.stroke",
+        "stylers": [
+            {
+                "color": "#bbd9e9"
+            },
+            {
+                "gamma": 2
+            }
+        ]
+    },
+    {
+        "featureType": "transit.line",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "color": "#a3aeb5"
+            }
+        ]
+    },
+    {
+        "featureType": "water",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "color": "#bbd9e9"
+            }
+        ]
+    }
+]
 
 
 
