@@ -46,7 +46,7 @@ export default function MyListItem(props) {
         
         <View>
     <TouchableOpacity 
-            onPress={() => {navigation.navigate("RestRoom", {item})}}
+            onPress={() => {navigation.navigate("RestRoom", {props})}}
             >
     <Card style={styles.card}>
       <HStack style={{paddingTop: 5,paddingRight: 5}}>

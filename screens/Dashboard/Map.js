@@ -35,7 +35,7 @@ const scrollX = new Animated.Value(0);
  
 let mapIndex = 0
 
-export default function Map() {
+export default function MainMap() {
 
     const location = useSelector((state) => state.location.location)
     const restroom = useSelector((state)=> state.restrooms.restrooms)

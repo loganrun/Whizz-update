@@ -20,10 +20,7 @@ const SPACING_FOR_CARD_INSET = width * 0.1 - 10;
 export default function Pee({route, navigation}) {
   const location = useSelector((state) => state.location.location)
   const {props} = route.params
-  const  item = props;
-  console.log(item)
-
-  const flashListRef = useRef(null);
+  
   //const navigation = useNavigation()
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(true);
@@ -34,18 +31,18 @@ export default function Pee({route, navigation}) {
         longitudeDelta: 0.070,
     });
 
-    useEffect(()=>{
+  //   useEffect(()=>{
 
-      setRegion({
-          latitude: location.loc.latitude,
-          longitude: location.loc.longitude,
-          latitudeDelta: 0.072,
-          longitudeDelta: 0.070,
-      })
+  //     setRegion({
+  //         latitude: location.loc.latitude,
+  //         longitude: location.loc.longitude,
+  //         latitudeDelta: 0.072,
+  //         longitudeDelta: 0.070,
+  //     })
 
-      // console.log('restroom loaded')
+  //     // console.log('restroom loaded')
 
-  },[])
+  // },[])
 
 
   if (!location) {
@@ -60,8 +57,8 @@ return (
 <View style={styles.container}>
 <MapView style={styles.map}
 initialRegion={{
-    longitude:location.loc.longitude,//-118.243683, //region.longitude,//-118.243683, //this.props.location.longitude,
-    latitude: location.loc.latitude, //34.052235, //region.latitude,//34.052235, //this.props.location.latitude,location.loc.latitude
+    longitude:props.item.longitude,//-118.243683, //region.longitude,//-118.243683, //this.props.location.longitude,
+    latitude: props.item.latitude, //34.052235, //region.latitude,//34.052235, //this.props.location.latitude,location.loc.latitude
     latitudeDelta: 0.1564, //0.072,//{0.022},
     longitudeDelta: 0.0636//0.070,//{0.021}
 }}
@@ -70,11 +67,10 @@ showsUserLocation={true}
 showsMyLocationButton={true}
 >
 
-{/* <Marker
-key={index}
-coordinate={{latitude: marker.latitude, longitude: marker.longitude}}
+<Marker
+coordinate={{latitude: props.item.latitude, longitude: props.item.longitude}}
 image={premicon}
-/> */}
+/>
 </MapView>
 </View>
 );
@@ -105,7 +101,7 @@ const styles = StyleSheet.create({
   map: {
     flex:1,
     width: '100%',
-    height: '100%'
+    height: 200
   },
   tool:{
     width: 250,
