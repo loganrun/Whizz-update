@@ -1,17 +1,24 @@
 import { useRef, useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import {
-  View,
-  Platform,
-  Text,
-  Image,ActivityIndicator, StyleSheet,Dimensions, TouchableOpacity, Animated, FlatList
+View, Platform,Text, Image,ActivityIndicator, StyleSheet,Dimensions, TouchableOpacity, Animated, FlatList,ScrollView
 } from "react-native";
 import MapView, { Callout, Marker,PROVIDER_GOOGLE} from 'react-native-maps';
 import {useDispatch, useSelector } from 'react-redux';
 import { getLocationStart, getLocationSuccess, getLocationFailed } from '../../locationSlice'
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import {HStack,Card,VStack, Button, Icon} from "native-base";
+import Ads from '../../components/Ads'
+import { showLocation } from "react-native-map-link";
+import { MaterialIcons } from '@expo/vector-icons';
 //import { useNavigation } from '@react-navigation/native';
 let premicon = require('../../assets/pin-verified.png')
+let verified = require('../../assets/mascot-01-verified-329x161.png')
+let tprating = require("../../assets/TPratings_5Stars.png")
+let tfresh = require("../../assets/TP-ratingsfresh.png")
+let tpmeh = require("../../assets/TP-ratingsmeh.png")
+let tpno = require("../../assets/TP-ratingsno!!!.png")
+const whizz = require('../../assets/whizz_logo1(6).png')
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = 180;
 const CARD_WIDTH = width;
@@ -27,25 +34,22 @@ export default function Pee({route, navigation}) {
   const [region, setRegion] = useState({
         latitude: 0.0,
         longitude: 0.0,
-        latitudeDelta: 0.072,
-        longitudeDelta: 0.070,
+        latitudeDelta: 0.003,
+        longitudeDelta: 0.003,
     });
 
-  //   useEffect(()=>{
+    const distance = props.item.distance.toString().slice(0, 4)
 
-  //     setRegion({
-  //         latitude: location.loc.latitude,
-  //         longitude: location.loc.longitude,
-  //         latitudeDelta: 0.072,
-  //         longitudeDelta: 0.070,
-  //     })
-
-  //     // console.log('restroom loaded')
-
-  // },[])
+    // const handleDirections = () => {
+    //     showLocation({
+    //     latitude: props.item.latitude,
+    //     longitude: props.item.longitude,
+    //     title: props.item.name
+    //     });
+    // };
 
 
-  if (!location) {
+if (!location) {
     return (
     <View style={{flex: 1, justifyContent: 'center'}}>
         <ActivityIndicator size="large" />
@@ -59,8 +63,8 @@ return (
 initialRegion={{
     longitude:props.item.longitude,//-118.243683, //region.longitude,//-118.243683, //this.props.location.longitude,
     latitude: props.item.latitude, //34.052235, //region.latitude,//34.052235, //this.props.location.latitude,location.loc.latitude
-    latitudeDelta: 0.1564, //0.072,//{0.022},
-    longitudeDelta: 0.0636//0.070,//{0.021}
+    latitudeDelta: 0.003, //0.072,//{0.022},
+    longitudeDelta: 0.003//0.070,//{0.021}
 }}
 customMapStyle={mapStyles}
 showsUserLocation={true}
@@ -72,19 +76,73 @@ coordinate={{latitude: props.item.latitude, longitude: props.item.longitude}}
 image={premicon}
 />
 </MapView>
+<View style = {{height: 170,width: '100%', padding: 0}}>
+    <View>
+    <Card style={styles.card}>
+    <HStack style={{paddingRight: 5}}>
+    <Image resizeMode={'contain'} source={whizz}style={{width: 100, height: 100}}/> 
+    </HStack>
+    {/* <VStack Style={{justifyContent: 'flex-end',width: 50, height: 30, position: 'relative', top: 10, right:10}}>
+    <Button style={{top: 10, right:10, position:'absolute'}} leftIcon={<Icon as={MaterialIcons} name="directions" size="sm"  />}>
+        Directions
+    </Button>
+    </VStack> */}
+    <VStack style={{paddingTop: 0, paddingLeft: 10}}>
+    
+    
+    <Text numberOfLines={1} style={{fontWeight: 'bold',textTransform: 'capitalize', color: '#173E81', fontSize: 20}}>{props.item.name}</Text>
+        <Text numberOfLines={1} style={{fontSize:15, marginBottom:1}}>{ props.item.street}</Text>
+        <Text style={{fontSize:15, marginBottom:1}}>Distance: {distance} miles</Text>
+        {/* <Text style={{width: 220, height: 40}}><Image resizeMode={'contain'} source={tprating}style={{width:150, height: 30}}/></Text> */}
+        <Image resizeMode={'contain'} source={tprating}style={{width:200, height: 50, paddingLeft:0, paddingBottom: 10}}/>
+        <Button style={{width:120, height:40, paddingTop:10}}  leftIcon={<Icon as={MaterialIcons} name="directions" size="sm"  />}>
+        Directions
+    </Button>
+    </VStack>
+    
+    
+    </Card>
+    </View>
+</View>
+<ScrollView style={{height: 1000, width:'100%', padding:0, backgroundColor: 'white'}}>
+    <Ads/>
+    <View style={{width: '100%', height: 160, paddingTop: 10}}>
+        <View>
+            <Text style={{paddingLeft: 40,fontWeight: 'bold',textTransform: 'capitalize', color: '#173E81', fontSize: 25}}>Rate The RestRoom!</Text>
+        </View>
+    <Card style={styles.card}>
+    <HStack style={{paddingRight: 5}}>
+    <Image resizeMode={'contain'} source={tpno}style={{width: 100, height: 100}}/> 
+    </HStack>
+    <HStack style={{paddingRight: 5}}>
+    <Image resizeMode={'contain'} source={tpmeh}style={{width: 100, height: 100}}/> 
+    </HStack>
+    <HStack style={{paddingRight: 5}}>
+    <Image resizeMode={'contain'} source={tfresh}style={{width: 100, height: 100}}/> 
+    </HStack>
+    {/* <View style={{width: '100%', height: 160, paddingTop: 10}}>
+        <View>
+            <Text style={{paddingLeft: 40,fontWeight: 'bold',textTransform: 'capitalize', color: '#173E81', fontSize: 25}}>Current Rating</Text>
+        </View>
+    </View> */}
+    </Card>
+        
+    </View>
+
+</ScrollView>
 </View>
 );
 }
 
 const styles = StyleSheet.create({
-  container: {
+container: {
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  list:{
-    height: 150,
+},
+list:{
+    height: 170,
     //marginBottom: 20,
     marginLeft: 0,
     marginRight: 0,
@@ -99,9 +157,9 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   map: {
-    flex:1,
+    
     width: '100%',
-    height: 200
+    height: 150
   },
   tool:{
     width: 250,
@@ -168,14 +226,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF",
     borderTopLeftRadius: 5,
     borderTopRightRadius: 5,
-    marginHorizontal: 10,
+    //marginHorizontal: 10,
     shadowColor: "#000",
     shadowRadius: 5,
     shadowOpacity: 0.3,
     shadowOffset: { x: 2, y: -2 },
     height: CARD_HEIGHT,
     width: '100%',
-    overflow: "hidden",
+    //overflow: "hidden",
     padding: 0
   },
   cardImage: {

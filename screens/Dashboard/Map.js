@@ -14,6 +14,7 @@ import MapView, { Callout, Marker,PROVIDER_GOOGLE} from 'react-native-maps';
 import {useDispatch, useSelector } from 'react-redux';
 import { getLocationStart, getLocationSuccess, getLocationFailed } from '../../locationSlice'
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import restApi from "../../services/restroom"
 import refugeeApi from "../../services/refugee"
@@ -50,6 +51,7 @@ export default function MainMap() {
         latitudeDelta: 0.072,
         longitudeDelta: 0.070,
     });
+    const insets = useSafeAreaInsets();
 
     //console.log(restroom)
     useEffect(()=>{
@@ -441,13 +443,14 @@ container: {
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    
 },
 list:{
     height: 150,
     //marginBottom: 20,
     marginLeft: 0,
     marginRight: 0,
-    //width: CARD_WIDTH,
+    //width: '100%'
     
     
 

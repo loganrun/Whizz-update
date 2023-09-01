@@ -15,6 +15,7 @@ let unverified = require('../assets/mascot-01-unverified-349x161.png')
 let verified = require('../assets/mascot-01-verified-329x161.png')
 let premicon = require('../assets/pin-verified.png')
 let regIcon = require('../assets/pin-unverified.png')
+const whizz = require('../assets/whizz_logo1(6).png')
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = 180;
 const CARD_WIDTH = width;
@@ -49,14 +50,15 @@ export default function MyListItem(props) {
             onPress={() => {navigation.navigate("RestRoom", {props})}}
             >
     <Card style={styles.card}>
-      <HStack style={{paddingTop: 5,paddingRight: 5}}>
+      <HStack style={{paddingRight: 5}}>
       <Image resizeMode={'contain'} source={verified}style={{width: 120, height: 120}}/> 
       </HStack>
-      <VStack style={{paddingTop: 30, paddingRight:4}}>
-      <Text numberOfLines={1} style={{fontWeight: 'bold',textTransform: 'capitalize', color: '#173E81', fontSize: 15}}>{props.item.name}</Text>
-        <Text numberOfLines={1} style={{fontSize:13, marginBottom:5}}>{ props.item.street}</Text>
-        <Text>Distance: {distance} miles</Text>
-        <Text style={{width: 120, height: 30}}><Image resizeMode={'cover'} source={tprating}style={{width:120, height: 25}}/></Text>
+      <VStack style={{paddingTop: 0, paddingLeft: 10}}>
+      <Text numberOfLines={1} style={{fontWeight: 'bold',textTransform: 'capitalize', color: '#173E81', fontSize: 20}}>{props.item.name}</Text>
+        <Text numberOfLines={1} style={{fontSize:15, marginBottom:1}}>{ props.item.street}</Text>
+        <Text style={{fontSize:15, marginBottom:1}}>Distance: {distance} miles</Text>
+        {/* <Text style={{width: 220, height: 40}}><Image resizeMode={'contain'} source={tprating}style={{width:150, height: 30}}/></Text> */}
+        <Image resizeMode={'contain'} source={tprating}style={{width:200, height: 50, paddingLeft:0}}/>
       </VStack>
     </Card>
     </TouchableOpacity>

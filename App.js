@@ -76,7 +76,6 @@ function RootLayoutNav() {
 
     <Provider store={store}>
       <NativeBaseProvider>
-      <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator initialRouteName= {'Dashboard'} 
         screenOptions={{headerShown: false, gestureEnabled: true}}>
@@ -97,7 +96,6 @@ function RootLayoutNav() {
           <Stack.Screen name="Favourites" component={Favorites}/>
         </Stack.Navigator>
       </NavigationContainer>
-    </SafeAreaProvider>
     </NativeBaseProvider>
     </Provider>
   

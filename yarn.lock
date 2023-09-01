@@ -6911,7 +6911,7 @@ react-native-gradle-plugin@^0.70.3:
 
 react-native-map-link@^2.11.2:
   version "2.11.2"
-  resolved "https://registry.npmjs.org/react-native-map-link/-/react-native-map-link-2.11.2.tgz"
+  resolved "https://registry.yarnpkg.com/react-native-map-link/-/react-native-map-link-2.11.2.tgz#702f58128eb90a21634a6eb0bc2cc044d4b0cc4f"
   integrity sha512-Iw6ctKw6aGkFrYKnUFzkfzaIrXbRumVAdqGrspws6dp//xij1KFzQlONWcHjfzZeOa2Q7PR/TrlUfxPUdODrzw==
   dependencies:
     prop-types "^15.8.1"
