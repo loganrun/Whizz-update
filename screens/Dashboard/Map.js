@@ -13,6 +13,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import MapView, { Callout, Marker,PROVIDER_GOOGLE} from 'react-native-maps';
 import {useDispatch, useSelector } from 'react-redux';
 import { getLocationStart, getLocationSuccess, getLocationFailed } from '../../locationSlice'
+import { getRestroomsStart, getRestroomsSuccess, getRestroomsFailed} from '../../restroomsSlice'
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -40,6 +41,7 @@ export default function MainMap() {
 
     const location = useSelector((state) => state.location.location)
     const restroom = useSelector((state)=> state.restrooms.restrooms)
+    const dispatch = useDispatch()
     const flashListRef = useRef(null);
     const navigation = useNavigation()
     const [bathroom, setBathroom] = useState([]);
@@ -51,22 +53,23 @@ export default function MainMap() {
         latitudeDelta: 0.072,
         longitudeDelta: 0.070,
     });
+    const [newSearch, setNewSearch] = useState(false)
     const insets = useSafeAreaInsets();
 
     //console.log(restroom)
-    useEffect(()=>{
+    // useEffect(()=>{
 
-        setRegion({
-            latitude: location.loc.latitude,
-            longitude: location.loc.longitude,
-            latitudeDelta: 0.072,
-            longitudeDelta: 0.070,
-        })
+    //     setRegion({
+    //         latitude: location.loc.latitude,
+    //         longitude: location.loc.longitude,
+    //         latitudeDelta: 0.072,
+    //         longitudeDelta: 0.070,
+    //     })
 
-        setBathroom(restroom)
-        // console.log('restroom loaded')
+    //     setBathroom(restroom)
+    //     // console.log('restroom loaded')
 
-    },[])
+    // },[])
 
     // useEffect(()=>{
     //     setRegion({
@@ -126,11 +129,37 @@ export default function MainMap() {
         // )
         //setBathroom(result)
         // setLoading(false)
+        dispatch(getRestroomsSuccess(result))
+        setNewSearch(false)
     
         } catch (e) {
         console.log("error", e.message);
         }
     };
+
+    onRegionChangeComplete = async (region) =>{
+        setRegion({
+            latitude: region.latitude,
+            longitude: region.longitude,
+            latitudeDelta: 0.072,
+            longitudeDelta: 0.070,
+        })
+        setNewSearch(true)
+    }
+
+    const Search = ()=>{
+        if(newSearch)
+        return (
+        <View style={styles.chipsItem}>
+            <TouchableOpacity onPress={()=>{
+                loadRestrooms()
+            }}>
+            <Text style={styles.textSign}>Search This Area</Text>
+            </TouchableOpacity>
+        </View> 
+        )
+    }
+
 
 const createMarkers= () => {
     console.log('createMarkers called')
@@ -353,7 +382,7 @@ const createMarkers= () => {
     // //       }
     //   }
         
-    if (!bathroom && !region) {
+    if (!restroom && !location) {
         return (
         <View style={{flex: 1, justifyContent: 'center'}}>
             <ActivityIndicator size="large" />
@@ -373,8 +402,9 @@ return (
     customMapStyle={mapStyles}
     showsUserLocation={true}
     showsMyLocationButton={true}
+    onRegionChangeComplete={onRegionChangeComplete}
     >
-    {bathroom.map((marker, index) => (
+    {restroom.map((marker, index) => (
     <Marker
     key={index}
     coordinate={{latitude: marker.latitude, longitude: marker.longitude}}
@@ -388,6 +418,7 @@ return (
 ))}
 
     </MapView>
+    {Search()}
     {/* <View style={{ flex: 1, justifyContent: 'flex-end' }}>
       <FlatList 
         data={bathroom}
@@ -405,7 +436,7 @@ return (
     <View style={styles.list}>
     <FlashList
         ref={flashListRef}
-        data={bathroom}
+        data={restroom}
         horizontal
         pagingEnabled
         scrollEnabled
@@ -459,7 +490,7 @@ horizontal: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     padding: 10,
-  },
+},
 map: {
     flex:1,
     width: '100%',
@@ -470,8 +501,8 @@ tool:{
     height: 75,
     backgroundColor: '#fff',
     borderRadius: 10
-  },
-  searchBox: {
+},
+searchBox: {
     position:'absolute', 
     marginTop: Platform.OS === 'ios' ? 40 : 20, 
     flexDirection:"row",
@@ -485,16 +516,16 @@ tool:{
     shadowOpacity: 0.5,
     shadowRadius: 5,
     elevation: 10,
-  },
-  chipsScrollView: {
+},
+chipsScrollView: {
     position:'absolute', 
     top:Platform.OS === 'ios' ? 90 : 80, 
     paddingHorizontal:10
-  },
-  chipsIcon: {
+},
+chipsIcon: {
     marginRight: 5,
-  },
-  chipsItem: {
+},
+chipsItem: {
     position:'absolute', 
     top: 30, //Platform.OS === 'ios' ? 40 : 30, 
     paddingHorizontal:10,
@@ -510,20 +541,19 @@ tool:{
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.5,
     shadowRadius: 5,
-    elevation: 10
-    
-  },
-  scrollView: {
+    elevation: 10    
+},
+scrollView: {
     position: "absolute",
     bottom: 0,
     left: 0,
     right: 0,
     paddingVertical: 10,
-  },
-  endPadding: {
+},
+endPadding: {
     paddingRight: width - CARD_WIDTH,
-  },
-  card: {
+},
+card: {
     // padding: 10,
     flexDirection: "row",
     elevation: 2,
@@ -539,53 +569,53 @@ tool:{
     width: '100%',
     overflow: "hidden",
     padding: 0
-  },
-  cardImage: {
+},
+cardImage: {
     flex: 3,
     width: "100%",
     height: "100%",
     alignSelf: "center",
-  },
-  textContent: {
+},
+textContent: {
     flex: 2,
     padding: 10,
-  },
-  cardtitle: {
+},
+cardtitle: {
     fontSize: 12,
     // marginTop: 5,
     fontWeight: "bold",
-  },
-  cardDescription: {
+},
+cardDescription: {
     fontSize: 12,
     color: "#444",
-  },
-  markerWrap: {
+},
+markerWrap: {
     alignItems: "center",
     justifyContent: "center",
     width:50,
     height:50,
-  },
-  marker: {
+},
+marker: {
     width: 30,
     height: 30,
-  },
-  button: {
+},
+button: {
     alignItems: 'center',
     marginTop: 5
-  },
-  signIn: {
-      width: '100%',
-      padding:5,
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderRadius: 3
-  },
-  textSign: {
-      fontSize: 16,
-      fontWeight: 'bold',
-      color: '#173E81'
-      
-  }
+},
+signIn: {
+    width: '100%',
+    padding:5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 3
+},
+textSign: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#173E81'
+
+}
 });
 
 const mapStyles = [
