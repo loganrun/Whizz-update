@@ -10,9 +10,10 @@ class LogoTitle extends React.Component {
           
         <Image
           source={require('../assets/white_logo.png')}
-          style={{height: 50, width: 50}}
+          style={{height: 50, width: 50 }}
         />
         </View>
+        
       );
     }
   }
@@ -22,12 +23,13 @@ class LogoTitle extends React.Component {
   const styles = StyleSheet.create({
     header:{
       width:  '100%',
-      height: 75,
+      height: 105,
       flexDirection:  "row",
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: "#3480CB",
       paddingTop: 20,
+      marginTop: 20
       //paddingBottom:5
     }
   })

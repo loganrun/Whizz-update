@@ -391,6 +391,7 @@ const createMarkers= () => {
     }
     
 return (
+    
     <View style={styles.container}>
     <MapView style={styles.map}
     initialRegion={{
@@ -461,7 +462,9 @@ return (
         extraData={bathroom}
         />  
     </View>
+    <StatusBar style="light" />
     </View>
+    
     
     
 );

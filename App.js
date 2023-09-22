@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Alert } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
@@ -32,54 +32,94 @@ SplashScreen.preventAutoHideAsync();
 
 export default function App() {
 
-  const [errorMsg, setErrorMsg] = useState(null);
-  const [loaded, setLoaded] = useState(true)
+  const [location, setLocation] =useState(null)
+  const [appIsReady, setAppIsReady] = useState(false);
+  const [locGranted, setLocGranted] = useState(false)
 
+  
   useEffect(() => {
-    const getLocation = async () =>{
+    (async () => {
+
+      try{
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
-        Alert.alert('Permission to access location was denied');
+        Alert.alert('Permission to access location was denied. App needs location to operate');
         return;
+      }else{
+        //console.log("loc granted")
+        setLocGranted(true)
       }
-      let location = await Location.getCurrentPositionAsync({});
-      const jsonValue = JSON.stringify(location);
-      await AsyncStorage.setItem('location', jsonValue);
-
-      setLoaded(true)
+    }catch(e){
+      console.log(e)
     }
-    
-    getLocation()
+
+    })();
   }, []);
 
-  // useEffect(() => {
-  //   if (error) throw error;
-  // }, [error]);
+  //console.log(locGranted)
 
+  useEffect( ()=>{
+
+    const getLocation = async ()=>{
+      try{
+      if (locGranted === true){
+
+      let location = await Location.getCurrentPositionAsync({});
+      //console.log("location set")
+      setLocation(location);
+
+      }
+    }catch(e){
+      console.log(e)
+    }
+    }
+    getLocation()
+
+  },[locGranted])
+
+  //console.log(location)
+
+  useEffect(()=>{
+    const storage = async ()=>{
+
+    if(location !== null){
+        const jsonValue = JSON.stringify(location);
+        await AsyncStorage.setItem('location', jsonValue);
+        setAppIsReady(true)
+    }
+  }
+  storage()
+  }, [location])
+  //console.log(location)
+
+  //console.log(appIsReady)
   useEffect(() => {
-    if (loaded) {
+    if (appIsReady) {
       SplashScreen.hideAsync();
     }
-  }, [loaded]);
+  }, [appIsReady]);
 
-  if (!loaded) {
+  if (!appIsReady) {
     return null;
   }
 
   return <RootLayoutNav />;
 
   
+
+
 }
 
 function RootLayoutNav() {
   return (
 
     <Provider store={store}>
+      <SafeAreaProvider>
       <NativeBaseProvider>
       <NavigationContainer>
         <Stack.Navigator initialRouteName= {'Dashboard'} 
         screenOptions={{headerShown: false, gestureEnabled: true}}>
-          <Stack.Screen name="Auth" options={{headerShown: true,
+          <Stack.Screen name="Auth" options={{headerShown: false,
           headerTitle: 'Setup',
           headerStyle: {
             backgroundColor: '#3480CB',
@@ -97,11 +137,9 @@ function RootLayoutNav() {
         </Stack.Navigator>
       </NavigationContainer>
     </NativeBaseProvider>
+    </SafeAreaProvider>
     </Provider>
   
-      
-      
-    
   );
 }
 

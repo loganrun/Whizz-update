@@ -8,6 +8,7 @@ import {useDispatch } from 'react-redux';
 import restApi from "../../services/restroom"
 import refugeeApi from "../../services/refugee"
 import axios from 'axios'
+import * as Progress from 'react-native-progress';
 
 
 const AuthLoading = () => {
@@ -21,6 +22,8 @@ const AuthLoading = () => {
     });
     const [data, setData] = useState(false);
     const [ready, setReady] = useState(false)
+    const [progress, setProgress]= useState(0);
+    const [indeterminate, setIndeterminate] = useState(true)
 
     useEffect(()  => {
         const getData = async () =>{
@@ -39,6 +42,30 @@ const AuthLoading = () => {
         getData()
         
     }, []);
+
+    useEffect(()=>{
+
+        const animate =() => {
+            let progress = 0;
+            //this.setState({ progress });
+            setProgress(0)
+            setTimeout(() => {
+              //this.setState({ indeterminate: false });
+            setIndeterminate(false)
+            setInterval(() => {
+                progress += Math.random() / 5;
+                if (progress > 1) {
+                progress = 1;
+                }
+                //this.setState({ progress });
+                setProgress(progress)
+            }, 500);
+            }, 1500);
+        }
+
+        animate()
+
+    }, [])
 
     useEffect(()=>{
 
@@ -102,11 +129,44 @@ const AuthLoading = () => {
 
 return (
 
-        <View style={[styles.container, styles.horizontal]}>
-        
-        <ActivityIndicator size="large" color="#0000ff" />
-    
-        </View>
+    <View style={styles.container}>
+    <Text style={styles.welcome}>LOADING...</Text>
+    {/* <Progress.Bar
+      style={styles.progress}
+      progress={progress}
+      indeterminate={indeterminate}
+    /> */}
+    {/* <View style={styles.circles}>
+      <Progress.Circle
+        style={styles.progress}
+        progress={progress}
+        indeterminate={indeterminate}
+        size={130}
+      />
+      <Progress.Pie
+        style={styles.progress}
+        progress={progress}
+        indeterminate={indeterminate}
+        size={130}
+      />
+      <Progress.Circle
+        style={styles.progress}
+        progress={progress}
+        indeterminate={indeterminate}
+        size={130}
+        direction="counter-clockwise"
+      />
+    </View> */}
+    <View style={styles.circles}>
+      {/* <Progress.CircleSnail style={styles.progress} size={30} /> */}
+      <Progress.CircleSnail
+        style={styles.progress}
+        size={230}
+        thickness={8}
+        color={['#F44336', '#2196F3', '#009688']}
+      />
+    </View>
+  </View>
         
 )
 }
@@ -114,14 +174,27 @@ return (
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: "#ffff",
         alignItems: 'center',
         justifyContent: 'center',
+        paddingVertical: 20,
+    },
+    welcome: {
+        fontSize: 25,
+        textAlign: 'center',
+        margin: 10,
     },
     horizontal: {
         flexDirection: 'row',
         justifyContent: 'space-around',
         padding: 10,
+    },
+    circles: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    progress: {
+        margin: 10,
     },
     });
 
