@@ -95,9 +95,17 @@ image={premicon}
         <Text style={{fontSize:15, marginBottom:1}}>Distance: {distance} miles</Text>
         {/* <Text style={{width: 220, height: 40}}><Image resizeMode={'contain'} source={tprating}style={{width:150, height: 30}}/></Text> */}
         <Image resizeMode={'contain'} source={tprating}style={{width:200, height: 50, paddingLeft:0, paddingBottom: 10}}/>
-        <Button style={{width:120, height:40, paddingTop:10}}  leftIcon={<Icon as={MaterialIcons} name="directions" size="sm"  />}>
+        {/* <Button style={{width:120, height:40, paddingTop:10}}  leftIcon={<Icon as={MaterialIcons} name="directions" size="sm"  />}>
         Directions
-    </Button>
+    </Button> */}
+    <Button
+        title="Click me!"
+        icon={{ name: 'home', type: 'font-awesome' }}
+        raised
+        onPress={() => {
+          // Do something when the button is pressed
+        }}
+      />
     </VStack>
     
     
