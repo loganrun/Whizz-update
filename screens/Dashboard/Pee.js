@@ -7,7 +7,8 @@ import MapView, { Callout, Marker,PROVIDER_GOOGLE} from 'react-native-maps';
 import {useDispatch, useSelector } from 'react-redux';
 import { getLocationStart, getLocationSuccess, getLocationFailed } from '../../locationSlice'
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import {HStack,Card,VStack, Button, Icon} from "native-base";
+import {HStack,Card,VStack} from "native-base";
+import { Button } from 'react-native-elements';
 import Ads from '../../components/Ads'
 import { showLocation } from "react-native-map-link";
 import { MaterialIcons } from '@expo/vector-icons';
@@ -40,13 +41,14 @@ export default function Pee({route, navigation}) {
 
     const distance = props.item.distance.toString().slice(0, 4)
 
-    // const handleDirections = () => {
-    //     showLocation({
-    //     latitude: props.item.latitude,
-    //     longitude: props.item.longitude,
-    //     title: props.item.name
-    //     });
-    // };
+    const handleDirections = () => {
+        showLocation({
+        latitude: props.item.latitude,
+        longitude: props.item.longitude,
+        googleForceLatLon: true,
+        title: props.item.name
+        });
+    };
 
 
 if (!location) {
@@ -95,15 +97,23 @@ image={premicon}
         <Text style={{fontSize:15, marginBottom:1}}>Distance: {distance} miles</Text>
         {/* <Text style={{width: 220, height: 40}}><Image resizeMode={'contain'} source={tprating}style={{width:150, height: 30}}/></Text> */}
         <Image resizeMode={'contain'} source={tprating}style={{width:200, height: 50, paddingLeft:0, paddingBottom: 10}}/>
-        {/* <Button style={{width:120, height:40, paddingTop:10}}  leftIcon={<Icon as={MaterialIcons} name="directions" size="sm"  />}>
+        {/* <Button style={{width:120, height:40, paddingTop:10}}  
+        leftIcon={<Icon as={MaterialIcons} 
+        name="directions" size="sm"
+        onPress={()=>{
+            //handleDirections()
+            console.log("press")
+        }}
+        />}>
         Directions
     </Button> */}
     <Button
         title="Click me!"
-        icon={{ name: 'home', type: 'font-awesome' }}
+        icon={{ name: 'directions', type: 'MaterialIcons' }}
         raised
         onPress={() => {
           // Do something when the button is pressed
+          handleDirections()
         }}
       />
     </VStack>
