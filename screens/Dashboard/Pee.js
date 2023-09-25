@@ -1,8 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import {
-View, Platform,Text, Image,ActivityIndicator, StyleSheet,Dimensions, TouchableOpacity, Animated, FlatList,ScrollView
-} from "react-native";
+import {View, Platform,Text, Image,ActivityIndicator, StyleSheet,Dimensions, 
+    TouchableOpacity, Animated, FlatList,ScrollView} from "react-native";
 import MapView, { Callout, Marker,PROVIDER_GOOGLE} from 'react-native-maps';
 import {useDispatch, useSelector } from 'react-redux';
 import { getLocationStart, getLocationSuccess, getLocationFailed } from '../../locationSlice'
@@ -12,7 +11,6 @@ import { Button } from 'react-native-elements';
 import Ads from '../../components/Ads'
 import { showLocation } from "react-native-map-link";
 import { MaterialIcons } from '@expo/vector-icons';
-//import { useNavigation } from '@react-navigation/native';
 let premicon = require('../../assets/pin-verified.png')
 let verified = require('../../assets/mascot-01-verified-329x161.png')
 let tprating = require("../../assets/TPratings_5Stars.png")
@@ -84,38 +82,31 @@ image={premicon}
     <HStack style={{paddingRight: 5}}>
     <Image resizeMode={'contain'} source={whizz}style={{width: 100, height: 100}}/> 
     </HStack>
-    {/* <VStack Style={{justifyContent: 'flex-end',width: 50, height: 30, position: 'relative', top: 10, right:10}}>
-    <Button style={{top: 10, right:10, position:'absolute'}} leftIcon={<Icon as={MaterialIcons} name="directions" size="sm"  />}>
-        Directions
-    </Button>
-    </VStack> */}
     <VStack style={{paddingTop: 0, paddingLeft: 10}}>
     
     
     <Text numberOfLines={1} style={{fontWeight: 'bold',textTransform: 'capitalize', color: '#173E81', fontSize: 20}}>{props.item.name}</Text>
         <Text numberOfLines={1} style={{fontSize:15, marginBottom:1}}>{ props.item.street}</Text>
         <Text style={{fontSize:15, marginBottom:1}}>Distance: {distance} miles</Text>
-        {/* <Text style={{width: 220, height: 40}}><Image resizeMode={'contain'} source={tprating}style={{width:150, height: 30}}/></Text> */}
-        <Image resizeMode={'contain'} source={tprating}style={{width:200, height: 50, paddingLeft:0, paddingBottom: 10}}/>
-        {/* <Button style={{width:120, height:40, paddingTop:10}}  
-        leftIcon={<Icon as={MaterialIcons} 
-        name="directions" size="sm"
-        onPress={()=>{
-            //handleDirections()
-            console.log("press")
-        }}
-        />}>
-        Directions
-    </Button> */}
+        <Image resizeMode={'contain'} source={tprating}style={{width:150, height: 40, paddingLeft:0, paddingBottom: 10}}/>
+        
     <Button
-        title="Click me!"
-        icon={{ name: 'directions', type: 'MaterialIcons' }}
+        title="Directions"
+        icon={{ name: 'directions', type: 'MaterialIcons',size: 24,
+        color: 'white', justifyContent: 'flex-start' }}
         raised
-        onPress={() => {
-          // Do something when the button is pressed
-          handleDirections()
+        buttonStyle={{
+            backgroundColor: '#3480CB',
+            borderRadius: 5,
         }}
-      />
+        containerStyle={{
+            height: 50,
+            width: 150,
+        }}
+        onPress={() => {
+        handleDirections()
+        }}
+    />
     </VStack>
     
     
@@ -138,11 +129,6 @@ image={premicon}
     <HStack style={{paddingRight: 5}}>
     <Image resizeMode={'contain'} source={tfresh}style={{width: 100, height: 100}}/> 
     </HStack>
-    {/* <View style={{width: '100%', height: 160, paddingTop: 10}}>
-        <View>
-            <Text style={{paddingLeft: 40,fontWeight: 'bold',textTransform: 'capitalize', color: '#173E81', fontSize: 25}}>Current Rating</Text>
-        </View>
-    </View> */}
     </Card>
         
     </View>
