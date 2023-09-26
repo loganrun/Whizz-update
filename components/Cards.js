@@ -26,25 +26,7 @@ export default function MyListItem(props) {
     const location = useSelector((state) => state.location.location)
     const navigation = useNavigation()
     
-    return (
-        // <View>
-        //     <Card style={styles.card}>
-        //      <Left style={{paddingLeft: 2}}>
-        //      <Image resizeMode={'cover'} source={genericFood}style={{width: 145, height: 155,flex:1}}/>
-        //      </Left>  
-        //      <CardItem style={{flexDirection: 'column', width: 180}}>
-            //  <Right style={{alignItems: 'flex-end',}}>
-            //      <Text numberOfLines={1} style={{fontWeight: 'bold',textTransform: 'capitalize', color: '#173E81', fontSize: 15}}>{props.item.name}</Text>
-            //      <Text numberOfLines={1} style={{fontSize:13, marginBottom:5}}>{ props.item.street}</Text>
-            //      <Text style={{width: 120, height: 30}}><Image resizeMode={'cover'} source={tprating}style={{width:120, height: 25}}/></Text>
-            //      {/* <Text>Distance: {distance} miles</Text> */}
-            //      <Image resizeMode={'cover'} source={unverified}style={{width: 160, height: 75}}/> 
-            //  </Right>
-        //      </CardItem>
-        //     </Card>
-
-        // </View>
-        
+    return ( 
         <View>
     <TouchableOpacity 
             onPress={() => {navigation.navigate("RestRoom", {props})}}
@@ -67,107 +49,6 @@ export default function MyListItem(props) {
         
     );
 }
-// import { View, Text } from 'react-native'
-// import React from 'react'
-// import {
-
-//     Platform,
-    
-//     Image,ActivityIndicator, StyleSheet,Dimensions, TouchableOpacity, Animated, FlatList
-// } from "react-native";
-// import {Left,Right,Icon,Card,CardItem,Row,Button} from "native-base";
-// let tprating = require("../assets/TPratings_5Stars.png")
-// let genericFood = require('../assets/SEARCH-lower-card-generic-img-1.png')
-// let unverified = require('../assets/mascot-01-unverified-349x161.png')
-// let verified = require('../assets/mascot-01-verified-329x161.png')
-// let premicon = require('../assets/pin-verified.png')
-// let regIcon = require('../assets/pin-unverified.png')
-// const { width, height } = Dimensions.get("window");
-// const CARD_HEIGHT = 180;
-// const CARD_WIDTH = width * 0.80;
-// const SPACING_FOR_CARD_INSET = width * 0.1 - 10;
-
-// export default function Cards(props) {
-//     const distance = props.item.distance.toString().slice(0, 4)
-//     if(props.item.verified){
-//         return (
-//         <View>
-//             <TouchableOpacity 
-//             // onPress={() => {
-//             //   const eventProp = {
-//             //     id: props.item.id,
-//             //     name: props.item.name,
-//             //     street: props.item.street,
-//             //     city: props.item.city,
-//             //     distance: distance
-//             //   }
-//             //   Amplitude.logEventWithPropertiesAsync("RESTAURANT_SELECT", eventProp)
-//             // this.props.navigation.navigate("Pee", {
-//             //   id: item.id,
-//             //   item,
-//             //   distance: distance,
-//             //   currentLat: this.state.region.latitude,
-//             //   currentLon: this.state.region.longitude
-//             // })}}
-//             >
-//             <Card style={styles.card}>
-//             <Left style={{paddingLeft: 2}}>
-//             <Image resizeMode={'cover'} source={{uri:props.item.lowerCard}} style={{width: 145, height: 155,flex:1}}/>
-//             </Left> 
-//             <CardItem style={{flexDirection: 'column', width: 180}}>
-//             <Right style={{alignItems: 'flex-end',}}>
-//                 <Text numberOfLines={1} style={{fontWeight: 'bold',textTransform: 'capitalize', color: '#173E81', fontSize: 15}}>{props.item.name}</Text>
-//                 <Text numberOfLines={1} style={{fontSize:13}}>{props.item.street}</Text>
-//                 <Text style={{width: 120, height: 30}}><Image resizeMode={'cover'} source={tprating}style={{width:120, height: 25}}/></Text>
-//                 <Text>Distance: {distance} miles</Text>
-//                 <Image resizeMode={'cover'} source={verified}style={{width: 160, height: 75}}/>
-//             </Right>
-//             </CardItem>
-//         </Card>
-//             </TouchableOpacity>
-//         </View>
-//     )
-
-//     }else{  
-//     return (
-//         <View>
-//         <TouchableOpacity 
-//         //   onPress={() => {
-//         //     const eventProp = {
-//         //       id: props.item.id,
-//         //       name:  props.item.name,
-//         //       street:  props.item.street,
-//         //       city:  props.item.city,
-//         //       distance: distance
-//         //     }
-//         //     Amplitude.logEventWithPropertiesAsync("RESTAURANT_SELECT", eventProp)
-//         //   this.props.navigation.navigate("Pee", {
-//         //     id:  props.item.id,
-//         //     item,
-//         //     distance: distance,
-//         //     currentLat: this.state.region.latitude,
-//         //     currentLon: this.state.region.longitude
-//         //   })}}
-//         >
-//         <Card style={styles.card}>
-//             <Left style={{paddingLeft: 2}}>
-//             <Image resizeMode={'cover'} source={genericFood}style={{width: 145, height: 155,flex:1}}/>
-//             </Left>  
-//             <CardItem style={{flexDirection: 'column', width: 180}}>
-//             <Right style={{alignItems: 'flex-end',}}>
-//                 <Text numberOfLines={1} style={{fontWeight: 'bold',textTransform: 'capitalize', color: '#173E81', fontSize: 15}}>{props.item.name}</Text>
-//                 <Text numberOfLines={1} style={{fontSize:13, marginBottom:5}}>{ props.item.street}</Text>
-//                 <Text style={{width: 120, height: 30}}><Image resizeMode={'cover'} source={tprating}style={{width:120, height: 25}}/></Text>
-//                 <Text>Distance: {distance} miles</Text>
-//                 <Image resizeMode={'cover'} source={unverified}style={{width: 160, height: 75}}/> 
-//             </Right>
-//             </CardItem>
-//         </Card>
-//         </TouchableOpacity>
-//         </View>
-//     )
-//         }
-// }
 
 const styles = StyleSheet.create({
     container: {

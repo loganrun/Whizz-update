@@ -50,15 +50,6 @@ const TabNavigator = () => {
           tabBarLabel: "Restrooms",
           tabBarIcon: ({ focused }) => (
             focused ? <View
-              style={{
-                //height: 40,
-                //width: 40,
-                //backgroundColor:'#3480CB',
-                //justifyContent: 'center',
-                //alignItems: 'center',
-                //borderRadius:50,
-                //marginTop: 20,
-              }}
             >
               <Ionicons name="ios-search" size={30} color='#3480CB' />
             </View> :
@@ -82,15 +73,6 @@ const TabNavigator = () => {
           tabBarLabel: "Food",
           tabBarIcon: ({ focused }) => (
             focused ? <View
-              style={{
-                // height: 40,
-                // width: 40,
-                // backgroundColor:'#d20117',
-                // justifyContent: 'center',
-                // alignItems: 'center',
-                // borderRadius:50,
-                // marginTop:20
-              }}
             >
               <Ionicons name="ios-restaurant" size={30} color='#3480CB' />
             </View> : <View>
@@ -113,15 +95,6 @@ const TabNavigator = () => {
           tabBarLabel: "Favorite",
           tabBarIcon: ({ focused }) => (
             focused ? <View
-              style={{
-                // height: 40,
-                // width: 40,
-                // backgroundColor:'#d20117',
-                // justifyContent: 'center',
-                // alignItems: 'center',
-                // borderRadius:50,
-                // marginTop:20
-              }}
             >
               <Ionicons name="ios-heart" size={30} color='#3480CB' />
             </View> : <View>

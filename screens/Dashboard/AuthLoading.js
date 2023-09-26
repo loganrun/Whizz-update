@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native'
+import { View, Text, StyleSheet} from 'react-native'
 import React, { useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
@@ -21,7 +21,6 @@ const AuthLoading = () => {
             longitudeDelta: 0.070,
     });
     const [data, setData] = useState(false);
-    const [ready, setReady] = useState(false)
     const [progress, setProgress]= useState(0);
     const [indeterminate, setIndeterminate] = useState(true)
 
@@ -36,7 +35,6 @@ const AuthLoading = () => {
             latitudeDelta: 0.072,
             longitudeDelta: 0.070,
         })
-        //setReady(true)
 
         }
         getData()
@@ -47,17 +45,15 @@ const AuthLoading = () => {
 
         const animate =() => {
             let progress = 0;
-            //this.setState({ progress });
             setProgress(0)
             setTimeout(() => {
-              //this.setState({ indeterminate: false });
+    
             setIndeterminate(false)
             setInterval(() => {
                 progress += Math.random() / 5;
                 if (progress > 1) {
                 progress = 1;
                 }
-                //this.setState({ progress });
                 setProgress(progress)
             }, 500);
             }, 1500);
@@ -131,42 +127,17 @@ return (
 
     <View style={styles.container}>
     <Text style={styles.welcome}>LOADING...</Text>
-    {/* <Progress.Bar
-      style={styles.progress}
-      progress={progress}
-      indeterminate={indeterminate}
-    /> */}
-    {/* <View style={styles.circles}>
-      <Progress.Circle
-        style={styles.progress}
-        progress={progress}
-        indeterminate={indeterminate}
-        size={130}
-      />
-      <Progress.Pie
-        style={styles.progress}
-        progress={progress}
-        indeterminate={indeterminate}
-        size={130}
-      />
-      <Progress.Circle
-        style={styles.progress}
-        progress={progress}
-        indeterminate={indeterminate}
-        size={130}
-        direction="counter-clockwise"
-      />
-    </View> */}
+
     <View style={styles.circles}>
-      {/* <Progress.CircleSnail style={styles.progress} size={30} /> */}
-      <Progress.CircleSnail
+
+    <Progress.CircleSnail
         style={styles.progress}
         size={230}
         thickness={8}
         color={['#F44336', '#2196F3', '#009688']}
-      />
+    />
     </View>
-  </View>
+</View>
         
 )
 }

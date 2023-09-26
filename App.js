@@ -10,16 +10,7 @@ import {NativeBaseProvider} from 'native-base'
 import {Provider} from 'react-redux';
 import {store} from './store'
 import * as SplashScreen from 'expo-splash-screen'
-import Logo2 from './components/Logo2'
-
-
-
-
-//import AppLoading from 'expo-app-loading';
-//import { useFonts } from 'expo-font';
-//import {MainLayout} from './src/screens';
 import { Auth } from './screens/index';
-// import {Maps} from './screens/index';
 import { Food } from './screens/index';
 import { Favorites } from './screens/index';
 import {Pee}from './screens/index'
@@ -46,7 +37,7 @@ export default function App() {
         Alert.alert('Permission to access location was denied. App needs location to operate');
         return;
       }else{
-        //console.log("loc granted")
+
         setLocGranted(true)
       }
     }catch(e){
@@ -56,8 +47,6 @@ export default function App() {
     })();
   }, []);
 
-  //console.log(locGranted)
-
   useEffect( ()=>{
 
     const getLocation = async ()=>{
@@ -65,7 +54,6 @@ export default function App() {
       if (locGranted === true){
 
       let location = await Location.getCurrentPositionAsync({});
-      //console.log("location set")
       setLocation(location);
 
       }
@@ -76,8 +64,6 @@ export default function App() {
     getLocation()
 
   },[locGranted])
-
-  //console.log(location)
 
   useEffect(()=>{
     const storage = async ()=>{
@@ -90,9 +76,7 @@ export default function App() {
   }
   storage()
   }, [location])
-  //console.log(location)
-
-  //console.log(appIsReady)
+  
   useEffect(() => {
     if (appIsReady) {
       SplashScreen.hideAsync();
