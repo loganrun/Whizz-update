@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { getRestroomsStart, getRestroomsSuccess, getRestroomsFailed} from '../../restroomsSlice'
 import { getLocationStart, getLocationSuccess, getLocationFailed } from '../../locationSlice'
+import { getUserSuccess } from '../../userSlice';
 import {useDispatch } from 'react-redux';
 import restApi from "../../services/restroom"
 import refugeeApi from "../../services/refugee"
@@ -42,8 +43,19 @@ const AuthLoading = () => {
     }, []);
 
     useEffect(()=>{
+        const getUser = async () =>{
+            const jsonValue = await AsyncStorage.getItem('user');
+            const user = JSON.parse(jsonValue)
+            if(user !== null){
+                dispatch(getUserSuccess(true))
+            }
+            
+        }
+        getUser()
+    },[])
 
-        const animate =() => {
+    useEffect(()=>{
+        const animate = () => {
             let progress = 0;
             setProgress(0)
             setTimeout(() => {

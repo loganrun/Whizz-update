@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 export default function Food() {
   return (
     <View style={styles.container}>
-      <Text>Hello from food</Text>
+      <Text>Feature Coming Soon</Text>
       <StatusBar style="auto" />
     </View>
   );

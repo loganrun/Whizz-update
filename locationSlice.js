@@ -21,10 +21,6 @@ reducers: {
     state.isLoading = false;
     const loc = payload.coords
     return { ...state, location: {...state.location, loc} };
-      // console.log(current(state))
-      // return { ...state, locations: { ...state.locations, payload } };
-    //state.location = action.payload;
-    //console.log(current(state))
     },
     getLocationFailed(state, action) {
     state.isLoading = false;

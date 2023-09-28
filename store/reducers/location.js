@@ -9,7 +9,6 @@ export default function(state = initialState, action) {
     const { type, payload } = action;
   switch (type) {
     case INITIAL_LOCATION:
-        //console.log(payload.coords)
         const loc = payload.coords
       return { ...state, initlocation: {...state.initlocation, loc} };
     case INITIAL_LOCATION_ERROR:

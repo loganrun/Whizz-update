@@ -1,10 +1,4 @@
-//import { Text, View, Button } from 'react-native';
-//import { useState } from 'react';
-import {
-
-    Platform,Text,View,
-    
-    Image,ActivityIndicator, StyleSheet,Dimensions, TouchableOpacity, Animated, FlatList
+import {Platform,Text,View,Image,ActivityIndicator, StyleSheet,Dimensions, TouchableOpacity, Animated, FlatList
 } from "react-native";
 import {HStack,Card,VStack} from "native-base";
 import { useNavigation } from '@react-navigation/native';
@@ -39,7 +33,6 @@ export default function MyListItem(props) {
       <Text numberOfLines={1} style={{fontWeight: 'bold',textTransform: 'capitalize', color: '#173E81', fontSize: 20}}>{props.item.name}</Text>
         <Text numberOfLines={1} style={{fontSize:15, marginBottom:1}}>{ props.item.street}</Text>
         <Text style={{fontSize:15, marginBottom:1}}>Distance: {distance} miles</Text>
-        {/* <Text style={{width: 220, height: 40}}><Image resizeMode={'contain'} source={tprating}style={{width:150, height: 30}}/></Text> */}
         <Image resizeMode={'contain'} source={tprating}style={{width:200, height: 50, paddingLeft:0}}/>
       </VStack>
     </Card>

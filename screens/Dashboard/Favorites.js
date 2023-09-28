@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 export default function Favorites() {
   return (
     <View style={styles.container}>
-      <Text>Hello from Favorites</Text>
+      <Text>Favorites Feature Coming Soon</Text>
       <StatusBar style="auto" />
     </View>
   );
