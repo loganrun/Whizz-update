@@ -10,6 +10,9 @@ import {NativeBaseProvider} from 'native-base'
 import {Provider} from 'react-redux';
 import {store} from './store'
 import * as SplashScreen from 'expo-splash-screen'
+import Header from "./components/Header"
+import {Map} from './screens/index';
+
 import { Auth } from './screens/index';
 import { Food } from './screens/index';
 import { Favorites } from './screens/index';
@@ -18,6 +21,7 @@ import * as Location from 'expo-location';
 
 
 const Stack = createNativeStackNavigator()
+const logo = require('./assets/white_logo.png')
 
 SplashScreen.preventAutoHideAsync();
 
@@ -109,7 +113,8 @@ function RootLayoutNav() {
             backgroundColor: '#3480CB',
           },
           headerTintColor: '#ffff',}}  component={Auth}/>
-          <Stack.Screen name="Map"   component={TabNavigator}/>
+          <Stack.Screen name="Map"   options={{headerShown: true,
+          header: () => <Header logo={logo}/>}}   component={Map}/>
           <Stack.Screen name="RestRoom" options={{headerShown: true,
           headerTitle: 'RestRoom',
           headerStyle: {
