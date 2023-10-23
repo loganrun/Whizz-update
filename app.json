@@ -1,15 +1,11 @@
 {
   "expo": {
     "name": "Whizz",
-    "slug": "whizz",
-    "privacy": "public",
-    "platforms": [
-      "ios",
-      "android"
-    ],
-    "version": "6.0.0",
+    "slug": "wz",
+    "version": "3.8.0",
     "orientation": "portrait",
     "icon": "./assets/whizz_logo1.png",
+    "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash1.png",
       "resizeMode": "cover"
@@ -22,58 +18,30 @@
     ],
     "ios": {
       "bundleIdentifier": "com.TheWhizzApp",
-    
-      "buildNumber": "6.0.0",
-      "supportsTablet": true,
-      "config": {
-        "googleMapsApiKey": "AIzaSyCAhDELg7wMXqK1UbELmZvNryFVw9Ni5zM",
-        "googleSignIn": {
-          "reservedClientId": "com.googleusercontent.apps.5680477837-1j6dfu5lhp5iu3hhoac181i3hnkcen24"
-        }
-      },
-      "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "Whizz requires your location in order to recommend open restrooms in your vicinity"
-      }
+      "googleServicesFile": "./GoogleService-Info.plist",
+      "buildNumber": "5.0",
+      "supportsTablet": true
     },
     "android": {
       "package": "com.TheWhizzApp.gotta_go",
-      "googleServicesFile": "./google-services.json",
-      "versionCode": 22,
+      "versionCode": 20,
       "config": {
         "googleMaps": {
-          "apiKey": "AIzaSyCFDvLCd6P4F5fyG6OIiJeIcZG6_DS606c"
+          "apiKey": "AIzaSyBcAJd1kfs80B2n8US3gevDBfXqnYafGMw"
         }
       },
-      "permissions": [
-        "ACCESS_FINE_LOCATION","ACCESS_COARSE_LOCATION","FOREGROUND_SERVICE"
-      ]
-    },
-    "web": {
-      "config": {
-        "firebase": {
-          "apiKey": "AIzaSyCfx94bwaO-VnQosXn4aUIi_DKUCdAcdEA",
-          "authDomain": "wizusers.firebaseapp.com",
-          "databaseURL": "https://wizusers.firebaseio.com",
-          "projectId": "wizusers",
-          "storageBucket": "wizusers.appspot.com",
-          "messagingSenderId": "5680477837",
-          "appId": "1:5680477837:web:8bff0f0c656ab065",
-          "measurementId": "G-FQN5Y3BVZD"
-        }
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#FFFFFF"
       }
     },
-    "description": "When you gotta go!",
-    "hooks": {
-      "postPublish": [
-        {
-          "file": "sentry-expo/upload-sourcemaps",
-          "config": {
-            "organization": "whizz",
-            "project": "whizz",
-            "authToken": "2f23520562824d63a6c07d06e57770b1be046864c98446dcac1355fd24e05745"
-          }
-        }
-      ]
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "07373e54-d9ed-4b52-b090-b391af522a09"
+      }
     }
   }
 }
