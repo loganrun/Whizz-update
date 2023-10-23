@@ -11,7 +11,7 @@ import { Button } from 'react-native-elements';
 import Ads from '../../components/Ads'
 import { showLocation } from "react-native-map-link";
 import { MaterialIcons } from '@expo/vector-icons';
-let premicon = require('../../assets/pin-verified.png')
+let premicon = require('../../assets/pin-verified2.png')
 let verified = require('../../assets/mascot-01-verified-329x161.png')
 let tprating = require("../../assets/TPratings_5Stars.png")
 let tfresh = require("../../assets/TP-ratingsfresh.png")
@@ -114,11 +114,14 @@ image={premicon}
     </View>
 </View>
 <ScrollView style={{height: 1000, width:'100%', padding:0, backgroundColor: 'white'}}>
-    <Ads/>
-    <View style={{width: '100%', height: 160, paddingTop: 10}}>
+    <Ads style={{ paddingTop: 10}}/>
+    <View style={{width: '100%', height: 200, paddingTop: 10}}>
+    
+    
         <View>
             <Text style={{paddingLeft: 40,fontWeight: 'bold',textTransform: 'capitalize', color: '#173E81', fontSize: 25}}>Rate The RestRoom!</Text>
         </View>
+    <View>
     <Card style={styles.card}>
     <HStack style={{paddingRight: 5}}>
     <Image resizeMode={'contain'} source={tpno}style={{width: 100, height: 100}}/> 
@@ -130,7 +133,13 @@ image={premicon}
     <Image resizeMode={'contain'} source={tfresh}style={{width: 100, height: 100}}/> 
     </HStack>
     </Card>
-        
+    <View style={styles.overlay}>
+    <Text style={styles.Overtext}>Feature Coming Soon</Text>
+    </View>
+    </View>
+    
+    
+      
     </View>
 
 </ScrollView>
@@ -153,14 +162,30 @@ list:{
     //width: CARD_WIDTH,
     
     
-  
-  },
-  horizontal: {
+
+},
+overlay: {
+    position: 'absolute',
+    //top: 0,
+    //left: 0,
+    //right: 0,
+    //bottom: 0,
+    height: 160,
+    width: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    justifyContent: 'center',
+    alignItems: 'center',
+},
+Overtext: {
+    color: 'white',
+    fontSize: 20,
+},
+horizontal: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     padding: 10,
-  },
-  map: {
+},
+map: {
     
     width: '100%',
     height: 150

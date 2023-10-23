@@ -18,7 +18,7 @@
     ],
     "ios": {
       "bundleIdentifier": "com.TheWhizzApp",
-      "googleServicesFile": "./GoogleService-Info.plist",
+      "googleMapsApiKey": "AIzaSyBcAJd1kfs80B2n8US3gevDBfXqnYafGMw",
       "buildNumber": "5.0",
       "supportsTablet": true
     },
@@ -31,7 +31,7 @@
         }
       },
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/whizz_logo1.png",
         "backgroundColor": "#FFFFFF"
       }
     },
@@ -41,7 +41,8 @@
     "extra": {
       "eas": {
         "projectId": "07373e54-d9ed-4b52-b090-b391af522a09"
-      }
+      },
+      "permissions": ["location"]
     }
   }
 }
