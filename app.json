@@ -38,11 +38,28 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "whizz",
+            "project": "whizz",
+            "authToken": "2f23520562824d63a6c07d06e57770b1be046864c98446dcac1355fd24e05745"
+          }
+        }
+      ]
+    },
     "extra": {
       "eas": {
         "projectId": "07373e54-d9ed-4b52-b090-b391af522a09"
       },
-      "permissions": ["location"]
-    }
+      "permissions": [
+        "location"
+      ]
+    },
+    "plugins": [
+      "sentry-expo"
+    ]
   }
 }

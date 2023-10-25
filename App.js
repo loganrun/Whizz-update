@@ -4,6 +4,7 @@ import { StyleSheet, Text, View, Alert } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import TabNavigator from "./Navigation/TabNavigator"
+import * as Sentry from 'sentry-expo';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {NativeBaseProvider} from 'native-base'
@@ -18,12 +19,16 @@ import { Food } from './screens/index';
 import { Favorites } from './screens/index';
 import {Pee}from './screens/index'
 import * as Location from 'expo-location';
-
-
 const Stack = createNativeStackNavigator()
 const logo = require('./assets/white_logo.png')
 
 SplashScreen.preventAutoHideAsync();
+
+Sentry.init({
+  dsn: 'https://089403116866468aa120b8b535bbb89f@o412716.ingest.sentry.io/5291906',
+  enableInExpoDevelopment: true,
+  debug: true, 
+});
 
 export default function App() {
 
@@ -44,8 +49,8 @@ export default function App() {
 
         setLocGranted(true)
       }
-    }catch(e){
-      console.log(e)
+    }catch(error){
+      Sentry.Native.captureException(error);
     }
 
     })();
@@ -61,8 +66,8 @@ export default function App() {
       setLocation(location);
 
       }
-    }catch(e){
-      console.log(e)
+    }catch(error){
+      Sentry.Native.captureException(error);
     }
     }
     getLocation()
