@@ -11,7 +11,8 @@
       "resizeMode": "cover"
     },
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/07373e54-d9ed-4b52-b090-b391af522a09"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -30,10 +31,10 @@
           "apiKey": "AIzaSyBcAJd1kfs80B2n8US3gevDBfXqnYafGMw"
         }
       },
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/whizz_logo1.png",
-        "backgroundColor": "#FFFFFF"
-      }
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION"
+      ] 
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -53,13 +54,13 @@
     "extra": {
       "eas": {
         "projectId": "07373e54-d9ed-4b52-b090-b391af522a09"
-      },
-      "permissions": [
-        "location"
-      ]
+      }
     },
     "plugins": [
       "sentry-expo"
-    ]
+    ],
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    }
   }
 }
