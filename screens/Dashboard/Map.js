@@ -4,7 +4,7 @@ import {
     View,
     Platform,
     Text,
-    Image,ActivityIndicator, StyleSheet,Dimensions, TouchableOpacity, Animated, FlatList
+    ActivityIndicator, StyleSheet,Dimensions, TouchableOpacity, Animated, 
 } from "react-native";
 import { FlashList } from '@shopify/flash-list';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -80,7 +80,8 @@ export default function MainMap() {
     
             return prelim
         })).catch(err =>{
-            console.log("error", err.message);
+            
+            Sentry.Native.captureException(err)
         })
     
         // const  bathroom = await result.reduce((acc, current) =>{
@@ -98,8 +99,8 @@ export default function MainMap() {
         dispatch(getRestroomsSuccess(result))
         setNewSearch(false)
     
-        } catch (e) {
-        console.log("error", e.message);
+        } catch (error) {
+            Sentry.Native.captureException(error)
         }
     };
 
@@ -126,227 +127,6 @@ export default function MainMap() {
         )
     }
 
-
-// const createMarkers= () => {
-//     console.log('createMarkers called')
-//     return bathroom.map((marker, index) =>{ 
-//         //console.log(marker)
-//     return (
-        
-//     <Marker
-//     key={index}
-//     coordinate={{latitude: marker.latitude, longitude: marker.longitude}}
-//     image={premicon}
-//     //image= {{require('../../assets/pin-verified.png')}}
-//     //coordinate={marker.latlng}
-//     //title={marker.title}
-//     //description={marker.description}
-//     />
-    
-    
-// )})
-    //    // const { navigate } = this.props.navigation;
-        //     return bathroom.map((item, index) => {
-        
-        // if(Platform.OS === 'android' && item.verified){
-        // return (
-        // <MapView.Marker
-        //     key= {index}
-        //     coordinate={{
-        //         latitude: item.latitude,
-        //         longitude: item.longitude
-        //     }}
-            
-        //     image={premicon}
-            
-    //        // onPress={() => {
-    //         //     const markerProp = {
-    //         //     id: item.id,
-    //         //     name: item.name,
-    //         //     street: item.street,
-    //         //     city: item.city,
-    //         //     distance: item.distance
-    //         //     }
-                
-    //         //     // this.flatListRef.scrollToIndex({animated: true, index: index})
-    //         //     }}
-        //         >
-                
-        // </MapView.Marker>
-        //     )
-        //     }if(!item.verified){
-        //     return (
-        //         <MapView.Marker
-        //         key= {index}
-        //         coordinate={{
-        //         latitude: item.latitude,
-        //         longitude: item.longitude
-        //         }}
-
-        //         image={regIcon}
-    //             // onPress={() => {
-    //             // const markerProp = {
-    //             // id: item.id,
-    //             // name: item.name,
-    //             // street: item.street,
-    //             // city: item.city,
-    //             // distance: item.distance
-    //             // }
-    //             // // Amplitude.logEventWithPropertiesAsync("MARKER_SELECT", markerProp)
-    //             // // this.flatListRef.scrollToIndex({animated: true, index: index})
-    //             // }}
-                
-            //     >
-        
-            //     </MapView.Marker>
-            // )
-    
-            // }else{
-            // if(item.verified){
-            //     return (
-            //     <MapView.Marker
-            //     key= {index}
-            //     coordinate={{
-            //         latitude: item.latitude,
-            //         longitude: item.longitude
-            //     }}
-            //       //title={item.name}
-            //     image={premicon}
-    //               //style={{height: 30, width: 30}}
-    //             // onPress={() => {
-    //             //     const markerProp = {
-    //             //     id: item.id,
-    //             //     name: item.name,
-    //             //     street: item.street,
-    //             //     city: item.city,
-    //             //     distance: item.distance
-    //             //     }
-    //                 // Amplitude.logEventWithPropertiesAsync("MARKER_SELECT", markerProp)
-    //                 // this.flatListRef.scrollToIndex({animated: true, index: index})
-                    
-    //             //}}
-                
-            // >
-            // </MapView.Marker>
-            //     ) ;
-            // }else{
-    
-            //     return (
-            //     <MapView.Marker
-            //     key= {index}
-            //     coordinate={{
-            //         latitude: item.latitude,
-            //         longitude: item.longitude
-            //     }}
-            //       //title={item.name}
-            //     image={regIcon}
-    //               //style={{height: 30, width: 30}}
-    //             // onPress={() => {
-    //             //     const markerProp = {
-    //             //     id: item.id,
-    //             //     name: item.name,
-    //             //     street: item.street,
-    //             //     city: item.city,
-    //             //     distance: item.distance
-    //             //     }
-    //             //     // Amplitude.logEventWithPropertiesAsync("MARKER_SELECT", markerProp)
-    //             //     // this.flatListRef.scrollToIndex({animated: true, index: index})
-                    
-    //             // }}
-        //         >
-                    
-        // </MapView.Marker>
-        //         )
-        //     }
-        //     }
-        // });
-    //}
-
-    // const renderItem = ({ item }) => (
-    //     //console.log(item)
-
-
-    //      //const distance = item.distance.toString().slice(0, 4)
-    // //     if(item.verified){
-          
-    //         <View>
-    //           <TouchableOpacity 
-    //         //   onPress={() => {
-    //         //     const eventProp = {
-    //         //       id: item.id,
-    //         //       name: item.name,
-    //         //       street: item.street,
-    //         //       city: item.city,
-    //         //       distance: distance
-    //         //     }
-    //         //     Amplitude.logEventWithPropertiesAsync("RESTAURANT_SELECT", eventProp)
-    //         //   this.props.navigation.navigate("Pee", {
-    //         //     id: item.id,
-    //         //     item,
-    //         //     distance: distance,
-    //         //     currentLat: this.state.region.latitude,
-    //         //     currentLon: this.state.region.longitude
-    //         //   })}}
-    //           >
-    //           <Card style={styles.card}>
-    //           <Left style={{paddingLeft: 2}}>
-    //             <Image resizeMode={'cover'} source={{uri:item.lowerCard}} style={{width: 145, height: 155,flex:1}}/>
-    //           </Left> 
-    //             <CardItem style={{flexDirection: 'column', width: 180}}>
-    //             <Right style={{alignItems: 'flex-end',}}>
-    //               <Text numberOfLines={1} style={{fontWeight: 'bold',textTransform: 'capitalize', color: '#173E81', fontSize: 15}}>{item.name}</Text>
-    //               <Text numberOfLines={1} style={{fontSize:13}}>{item.street}</Text>
-    //               <Text style={{width: 120, height: 30}}><Image resizeMode={'cover'} source={tprating}style={{width:120, height: 25}}/></Text>
-    //               <Text>Distance: {distance} miles</Text>
-    //               <Image resizeMode={'cover'} source={verified}style={{width: 160, height: 75}}/>
-    //             </Right>
-    //             </CardItem>
-    //         </Card>
-    //           </TouchableOpacity>
-    //         </View>
-        
-    //       )
-    // //     }else{
-        
-    // //     return (
-    // //       <View>
-            // <TouchableOpacity 
-            // // onPress={() => {
-            // //   const eventProp = {
-            // //     id: item.id,
-            // //     name: item.name,
-            // //     street: item.street,
-            // //     city: item.city,
-            // //     distance: distance
-            // //   }
-            // //   Amplitude.logEventWithPropertiesAsync("RESTAURANT_SELECT", eventProp)
-            // // this.props.navigation.navigate("Pee", {
-            // //   id: item.id,
-            // //   item,
-            // //   distance: distance,
-            // //   currentLat: this.state.region.latitude,
-            // //   currentLon: this.state.region.longitude
-            // // })}}
-            // >
-    // //         <Card style={styles.card}>
-    // //           <Left style={{paddingLeft: 2}}>
-    // //           <Image resizeMode={'cover'} source={genericFood}style={{width: 145, height: 155,flex:1}}/>
-    // //           </Left>  
-    // //             <CardItem style={{flexDirection: 'column', width: 180}}>
-    // //             <Right style={{alignItems: 'flex-end',}}>
-    // //               <Text numberOfLines={1} style={{fontWeight: 'bold',textTransform: 'capitalize', color: '#173E81', fontSize: 15}}>{item.name}</Text>
-    // //               <Text numberOfLines={1} style={{fontSize:13, marginBottom:5}}>{item.street}</Text>
-    // //               <Text style={{width: 120, height: 30}}><Image resizeMode={'cover'} source={tprating}style={{width:120, height: 25}}/></Text>
-    // //               <Text>Distance: {distance} miles</Text>
-    // //               <Image resizeMode={'cover'} source={unverified}style={{width: 160, height: 75}}/> 
-    // //             </Right>
-    // //             </CardItem>
-    // //         </Card>
-    // //         </TouchableOpacity>
-    // //       </View>
-    // //   )
-    // //       }
-    //   }
     if (user === false){
         return(
         <Intro  onDone={onDone}/>
@@ -375,6 +155,7 @@ return (
     customMapStyle={mapStyles}
     showsUserLocation={true}
     showsMyLocationButton={true}
+    provider={PROVIDER_GOOGLE}
     onRegionChangeComplete={onRegionChangeComplete}
     >
     {restroom.map((marker, index) => (
@@ -392,20 +173,7 @@ return (
 
     </MapView>
     {Search()}
-    {/* <View style={{ flex: 1, justifyContent: 'flex-end' }}>
-      <FlatList 
-        data={bathroom}
-        keyExtractor={(item) => item.key}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        pagingEnabled
-        bounces={false}
-        onScroll={Animated.event(
-          [{ nativeEvent: { contentOffset: { x: scrollX } } }]
-        )}
-        scrollEventThrottle={16}
-      />
-    </View> */}
+    
     <View style={styles.list}>
     <FlashList
         ref={flashListRef}
