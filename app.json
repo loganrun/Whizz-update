@@ -24,7 +24,7 @@
       "supportsTablet": true
     },
     "android": {
-      "package": "com.TheWhizzApp.gotta_go",
+      "package": "com.TheWhizzApp",
       "versionCode": 22,
       "config": {
         "googleMaps": {
